@@ -1023,6 +1023,7 @@ async function fetchProfileText(filename) {
         document.getElementById('admin-content').style.display = 'block';
         renderAdminMessages(data.messages);
         loadAdminVisitors();
+        loadAdminPending();
       } else {
         status.textContent = 'Wrong password.';
       }
@@ -1100,6 +1101,51 @@ async function fetchProfileText(filename) {
     } catch {}
   }
 
+   async function loadAdminPending() {
+    try {
+      const res = await fetch(`${SERVER}/admin/pending`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: adminPassword })
+      });
+      const data = await res.json();
+      const container = document.getElementById('admin-pending');
+      if (!data.pending || !data.pending.length) {
+        container.innerHTML = '<div style="color:var(--muted);font-style:italic;font-size:0.9rem">No pending messages.</div>';
+        return;
+      }
+      container.innerHTML = data.pending.map(m => `
+        <div class="admin-message">
+          <pre style="white-space:pre-wrap;font-family:inherit;font-size:0.85rem">${m.content}</pre>
+          <div style="display:flex;gap:0.5rem;margin-top:0.75rem">
+            <button class="admin-reply-btn" onclick="adminApprove('${m.filename}')">Approve → Guestbook</button>
+            <button class="admin-ban-btn" onclick="adminReject('${m.filename}')">Reject</button>
+          </div>
+        </div>
+      `).join('');
+    } catch {}
+  }
+
+  async function adminApprove(filename) {
+    await fetch(`${SERVER}/admin/approve`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: adminPassword, filename })
+    });
+    loadAdminPending();
+    loadGuestbook();
+  }
+
+  async function adminReject(filename) {
+    if (!confirm('Reject and delete this message?')) return;
+    await fetch(`${SERVER}/admin/reject`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: adminPassword, filename })
+    });
+    loadAdminPending();
+  }
+  
   detectVisitor();
   loadAll();
 </script>
