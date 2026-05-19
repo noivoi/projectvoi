@@ -779,7 +779,6 @@
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'localtonet-skip-warning': 'true'
         },
         body: JSON.stringify({ country: country + (city ? `, ${city}` : '') })
       }).catch(() => {});
@@ -983,7 +982,6 @@ async function fetchProfileText(filename) {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'localtonet-skip-warning': 'true'
         },
         body: JSON.stringify({ name, message, recipients, website: honeypot })
       });
@@ -1012,8 +1010,7 @@ async function fetchProfileText(filename) {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'localtonet-skip-warning': 'true'
-        },
+          },
         body: JSON.stringify({ password: adminPassword })
       });
 
@@ -1052,7 +1049,7 @@ async function fetchProfileText(filename) {
           <div class="admin-reply-form">
             <input class="admin-reply-input" type="text" id="reply-${num}" placeholder="Reply to #${num}..." />
             <button class="admin-reply-btn" onclick="adminReply('${num}')">Reply</button>
-            ${ip ? `<button class="admin-ban-btn" onclick="adminBan('${ip}')">Ban ${ip}</button>` : ''}
+            ${ip ? '<button class="admin-ban-btn" onclick="adminBan(\'' + ip + '\')">Ban ' + ip + '</button>' : ''}
             <button class="admin-ban-btn" onclick="adminDelete('${m.filename}', 'messages')">Delete</button>
           </div>
         </div>`;
@@ -1066,7 +1063,6 @@ async function fetchProfileText(filename) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'localtonet-skip-warning': 'true'
       },
       body: JSON.stringify({ password: adminPassword, reply_to: num, reply })
     });
@@ -1080,7 +1076,6 @@ async function fetchProfileText(filename) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'localtonet-skip-warning': 'true'
       },
       body: JSON.stringify({ password: adminPassword, ip })
     });
