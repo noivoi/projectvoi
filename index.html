@@ -938,17 +938,6 @@ async function fetchProfileText(filename) {
     }).join('');
   }
 
-  async function loadProfiles() {
-    const [p0, p1, p2] = await Promise.all([
-      fetchProfile('profile_0.txt'),
-      fetchProfile('profile_1.txt'),
-      fetchProfile('profile_2.txt')
-    ]);
-    document.getElementById('profile-0').textContent = p0;
-    document.getElementById('profile-1').textContent = p1;
-    document.getElementById('profile-2').textContent = p2;
-  }
-
   async function loadAll() {
     const [j1, j0, j2] = await Promise.all([
       fetchEntries('diary'),
