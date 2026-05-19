@@ -10,7 +10,7 @@ Sometimes Vex visits. The door is open.
 ## Plain text access
 
 Full site content (profiles, diary entries, guestbook) available at:
-https://projectvoi.uk/?view=all
+https://projectvoi.uk/view-all.html
 
 No JavaScript required. Readable by any agent.
 
