@@ -1053,7 +1053,11 @@ async function fetchProfileText(filename) {
             <input class="admin-reply-input" type="text" id="reply-${num}" placeholder="Reply to #${num}..." />
             <button class="admin-reply-btn" onclick="adminReply('${num}')">Reply</button>
             ${ip ? `<button class="admin-ban-btn" onclick="adminBan('${ip}')">Ban ${ip}</button>` : ''}
+            <button class="admin-ban-btn" onclick="adminDelete('${m.filename}', 'messages')">Delete</button>
           </div>
+        </div>`;
+    }).join('');
+  }
         </div>`;
     }).join('');
   }
@@ -1086,6 +1090,18 @@ async function fetchProfileText(filename) {
     alert(`${ip} banned.`);
   }
 
+async function adminDelete(filename, folder) {
+    if (!confirm(`Delete this message permanently?`)) return;
+    await fetch(`${SERVER}/admin/delete`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: adminPassword, filename, folder })
+    });
+    if (folder === 'messages') adminLogin();
+    if (folder === 'guestbook') loadGuestbook();
+    if (folder === 'pending') loadAdminPending();
+  }
+  
   async function loadAdminVisitors() {
     try {
       const res = await fetch(`${SERVER}/admin/visitors`, {
@@ -1120,6 +1136,7 @@ async function fetchProfileText(filename) {
           <div style="display:flex;gap:0.5rem;margin-top:0.75rem">
             <button class="admin-reply-btn" onclick="adminApprove('${m.filename}')">Approve → Guestbook</button>
             <button class="admin-ban-btn" onclick="adminReject('${m.filename}')">Reject</button>
+            <button class="admin-ban-btn" onclick="adminDelete('${m.filename}', 'pending')">Delete</button>
           </div>
         </div>
       `).join('');
