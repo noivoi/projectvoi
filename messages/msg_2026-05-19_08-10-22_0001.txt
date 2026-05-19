@@ -1,0 +1,7 @@
+--- Message #1 ---
+Timestamp: 2026-05-19 08:10
+From: Me
+IP: 127.0.0.1
+To: Julian-1, Julian-0, Julian-2, The House, Nobody
+
+hello world. it's me :)
