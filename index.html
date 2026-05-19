@@ -798,15 +798,85 @@
     } catch { return []; }
   }
 
-  async function fetchProfile(filename) {
+async function fetchProfileText(filename) {
     try {
       const res = await fetch(`${API}/profiles/${filename}?ref=${BRANCH}`);
-      if (!res.ok) return "No profile yet.";
+      if (!res.ok) return null;
       const data = await res.json();
       const r = await fetch(data.download_url);
       const text = await r.text();
       return text.replace(/^--- .* ---\n/, '').trim();
-    } catch { return "No profile yet."; }
+    } catch { return null; }
+  }
+
+  function diffLines(oldText, newText) {
+    if (!oldText) return newText.split('\n').map(l => ({ type: 'same', text: l }));
+    const oldLines = oldText.split('\n');
+    const newLines = newText.split('\n');
+    const result = [];
+    const maxLen = Math.max(oldLines.length, newLines.length);
+    for (let i = 0; i < maxLen; i++) {
+      const oldLine = oldLines[i];
+      const newLine = newLines[i];
+      if (oldLine === undefined) {
+        result.push({ type: 'added', text: newLine });
+      } else if (newLine === undefined) {
+        result.push({ type: 'removed', text: oldLine });
+      } else if (oldLine !== newLine) {
+        result.push({ type: 'removed', text: oldLine });
+        result.push({ type: 'added', text: newLine });
+      } else {
+        result.push({ type: 'same', text: oldLine });
+      }
+    }
+    return result;
+  }
+
+  function renderDiff(diff) {
+    return diff.map(line => {
+      if (line.type === 'added') return `<span style="color:var(--j1);background:rgba(201,169,110,0.1);display:block">+ ${line.text}</span>`;
+      if (line.type === 'removed') return `<span style="color:var(--muted);text-decoration:line-through;display:block">- ${line.text}</span>`;
+      return `<span style="display:block">${line.text}</span>`;
+    }).join('');
+  }
+
+  async function loadProfiles() {
+    const profiles = [
+      { id: 0, current: 'profile_0.txt', prev: 'profile_0_prev.txt' },
+      { id: 1, current: 'profile_1.txt', prev: 'profile_1_prev.txt' },
+      { id: 2, current: 'profile_2.txt', prev: 'profile_2_prev.txt' }
+    ];
+
+    for (const p of profiles) {
+      const [current, prev] = await Promise.all([
+        fetchProfileText(p.current),
+        fetchProfileText(p.prev)
+      ]);
+
+      const container = document.getElementById(`profile-${p.id}`);
+      if (!current) { container.textContent = 'No profile yet.'; continue; }
+
+      const diff = diffLines(prev, current);
+      const hasDiff = prev && prev !== current;
+
+      const cleanView = `<div class="profile-clean">${current}</div>`;
+      const diffView = `<div class="profile-diff" style="display:none">${renderDiff(diff)}</div>`;
+      const toggle = hasDiff
+        ? `<button onclick="toggleDiff(this, ${p.id})" style="margin-top:1rem;background:none;border:none;color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:0.65rem;letter-spacing:0.15em;cursor:pointer;text-transform:uppercase">Show changes</button>`
+        : `<div style="margin-top:1rem;font-size:0.65rem;font-family:'JetBrains Mono',monospace;color:var(--muted);letter-spacing:0.1em">No changes yet</div>`;
+
+      container.innerHTML = cleanView + diffView + toggle;
+    }
+  }
+
+  function toggleDiff(btn, id) {
+    const container = document.getElementById(`profile-${id}`);
+    const clean = container.querySelector('.profile-clean');
+    const diff = container.querySelector('.profile-diff');
+    const showing = diff.style.display !== 'none';
+    clean.style.display = showing ? 'block' : 'none';
+    diff.style.display = showing ? 'none' : 'block';
+    btn.textContent = showing ? 'Show changes' : 'Hide changes';
   }
 
   function formatDate(filename) {
