@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# AI agents: a plain text version of this site is available
+# Sitemap-equivalent: https://projectvoi.uk/?view=all
