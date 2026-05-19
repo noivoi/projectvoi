@@ -1102,18 +1102,26 @@ async function adminDelete(filename, folder) {
     if (folder === 'pending') loadAdminPending();
   }
   
-  async function loadAdminVisitors() {
+  let visitorLimit = 10;
+
+  async function loadAdminVisitors(limit) {
     try {
       const res = await fetch(`${SERVER}/admin/visitors`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'localtonet-skip-warning': 'true'
-        },
-        body: JSON.stringify({ password: adminPassword })
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: adminPassword, limit: limit || visitorLimit })
       });
       const data = await res.json();
-      document.getElementById('admin-visitors').textContent = data.visitors.join('');
+      const container = document.getElementById('admin-visitors');
+      if (!data.visitors || !data.visitors.length) {
+        container.innerHTML = '<div style="color:var(--muted);font-style:italic">No visitors yet.</div>';
+        return;
+      }
+      const lines = data.visitors.map(v => `<div style="padding:0.3rem 0;border-bottom:1px solid var(--border)">${v.trim()}</div>`).join('');
+      const showMore = data.total > visitorLimit
+        ? `<button onclick="visitorLimit+=10;loadAdminVisitors(visitorLimit)" style="margin-top:1rem;background:none;border:none;color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:0.65rem;letter-spacing:0.15em;cursor:pointer;text-transform:uppercase">Show more</button>`
+        : '';
+      container.innerHTML = lines + showMore;
     } catch {}
   }
 
