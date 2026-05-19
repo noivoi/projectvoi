@@ -1,6 +1,5 @@
 {
-  "routes": [
-    { "src": "/view-all.html", "dest": "/view-all.html" },
-    { "src": "/(.*)", "dest": "/index.html" }
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
