@@ -994,21 +994,74 @@ async function fetchProfileText(filename) {
     return text.replace(/^---.*---\n\n/s, '').replace(/^##.*\n\n?/m, '').trim();
   }
 
-  function renderEntries(entries, containerId, small = false) {
+  const paginationState = {};
+
+  function renderEntries(entries, containerId, small, initialPageSize) {
+    if (small === undefined) small = false;
+    if (initialPageSize === undefined) initialPageSize = 5;
     const container = document.getElementById(containerId);
     if (!entries.length) {
       container.innerHTML = '<div style="color:var(--muted);font-style:italic;font-size:1rem">No entries yet.</div>';
       return;
     }
-    container.innerHTML = entries.map((e, i) => `
-      <div class="${small ? 'all-entry' : 'entry'}" style="animation-delay:${i * 0.1}s">
-        <div class="${small ? 'all-entry-date' : 'entry-date'}">${formatDate(e.name)}</div>
-        <div class="${small ? 'all-entry-body' : 'entry-body'}">${cleanText(e.text)}</div>
-      </div>
-    `).join('');
+    paginationState[containerId] = { entries: entries, shown: initialPageSize, pageSize: initialPageSize, small: small };
+    renderPage(containerId);
   }
 
-  async function loadGuestbook() {
+  function renderPage(containerId) {
+    const state = paginationState[containerId];
+    const entries = state.entries;
+    const shown = state.shown;
+    const small = state.small;
+    const container = document.getElementById(containerId);
+    const visible = entries.slice(0, shown);
+    const hasMore = shown < entries.length;
+    const sizes = [5, 10, 20, 40];
+
+    let sel = '';
+    sizes.forEach(function(n) {
+      const active = (shown === n && shown < entries.length) ? 'var(--text)' : 'var(--muted)';
+      sel += '<button onclick="changePageSize(\'' + containerId + '\',' + n + ')" style="background:none;border:none;color:' + active + ';font-family:\'JetBrains Mono\',monospace;font-size:0.6rem;letter-spacing:0.15em;cursor:pointer;padding:0;text-transform:uppercase">' + n + '</button>';
+      sel += '<span style="opacity:0.4"> · </span>';
+    });
+    const allActive = shown >= entries.length ? 'var(--text)' : 'var(--muted)';
+    sel += '<button onclick="changePageSize(\'' + containerId + '\',' + entries.length + ')" style="background:none;border:none;color:' + allActive + ';font-family:\'JetBrains Mono\',monospace;font-size:0.6rem;letter-spacing:0.15em;cursor:pointer;padding:0;text-transform:uppercase">ALL</button>';
+
+    const pageSizeSelector = '<div style="display:flex;gap:0.75rem;align-items:center;margin-bottom:1.5rem;font-family:\'JetBrains Mono\',monospace;font-size:0.6rem;color:var(--muted);letter-spacing:0.15em;flex-wrap:wrap"><span>SHOW</span>' + sel + '</div>';
+
+    let entriesHtml = '';
+    visible.forEach(function(e, i) {
+      const cls = small ? 'all-entry' : 'entry';
+      const dateCls = small ? 'all-entry-date' : 'entry-date';
+      const bodyCls = small ? 'all-entry-body' : 'entry-body';
+      entriesHtml += '<div class="' + cls + '" style="animation-delay:' + (i * 0.1) + 's">';
+      entriesHtml += '<div class="' + dateCls + '">' + formatDate(e.name) + '</div>';
+      entriesHtml += '<div class="' + bodyCls + '">' + cleanText(e.text) + '</div>';
+      entriesHtml += '</div>';
+    });
+
+    let loadMoreBtn = '';
+    if (hasMore) {
+      loadMoreBtn = '<div style="margin-top:2rem;text-align:center"><button onclick="loadMore(\'' + containerId + '\')" style="background:none;border:1px solid var(--border);color:var(--muted);font-family:\'JetBrains Mono\',monospace;font-size:0.65rem;letter-spacing:0.25em;text-transform:uppercase;padding:0.75rem 2rem;cursor:pointer" onmouseover="this.style.borderColor=\'var(--muted)\'" onmouseout="this.style.borderColor=\'var(--border)\'">Load more · ' + (entries.length - shown) + ' remaining</button></div>';
+    }
+
+    container.innerHTML = pageSizeSelector + entriesHtml + loadMoreBtn;
+  }
+
+  function loadMore(containerId) {
+    const state = paginationState[containerId];
+    state.shown = Math.min(state.shown + state.pageSize, state.entries.length);
+    renderPage(containerId);
+  }
+
+  function changePageSize(containerId, size) {
+    const state = paginationState[containerId];
+    state.shown = size;
+    if (size < state.entries.length) state.pageSize = size;
+    renderPage(containerId);
+  }
+
+    async function loadGuestbook() {
     const entries = await fetchEntries('guestbook');
     const container = document.getElementById('guestbook-entries');
     if (!entries.length) {
