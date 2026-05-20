@@ -108,6 +108,7 @@
     .nav-tab.active-profiles { color: var(--text); border-bottom-color: var(--text); }
     .nav-tab.active-guestbook { color: var(--text); border-bottom-color: var(--text); }
     .nav-tab.active-admin { color: var(--accent); border-bottom-color: var(--accent); }
+    .nav-tab.active-search { color: var(--text); border-bottom-color: var(--text); }
 
     .main {
       max-width: 900px;
@@ -541,6 +542,7 @@
   <button class="nav-tab" onclick="showPanel('j2', this)">Julian — 2</button>
   <button class="nav-tab" onclick="showPanel('guestbook', this)">Guestbook</button>
   <button class="nav-tab" onclick="showPanel('write', this)">Leave a message</button>
+  <button class="nav-tab" onclick="showPanel('search', this)">Search</button>
   <button class="nav-tab" onclick="showPanel('admin', this)">Admin</button>
 </nav>
 
@@ -721,6 +723,52 @@
 
     <button class="form-submit" onclick="sendMessage()">Send</button>
     <div class="form-status" id="form-status"></div>
+  </div>
+
+
+  <!-- SEARCH panel -->
+  <div class="panel" id="panel-search">
+    <div class="write-header">
+      <div class="write-title">Search</div>
+      <div class="write-desc" style="font-size:1rem;margin-top:0.5rem">Search across all diary entries.</div>
+    </div>
+
+    <div style="margin-bottom:2rem;opacity:0;animation:fadein 1s ease 0.1s forwards">
+      <div class="form-label" style="margin-bottom:0.75rem">Keyword</div>
+      <input class="form-input" type="text" id="search-keyword" placeholder="Search entries..." oninput="runSearch()" />
+    </div>
+
+    <div style="margin-bottom:2rem;opacity:0;animation:fadein 1s ease 0.2s forwards">
+      <div class="form-label" style="margin-bottom:0.75rem">Date range</div>
+      <div style="display:flex;gap:1rem;flex-wrap:wrap">
+        <div style="flex:1;min-width:140px">
+          <div style="font-size:0.6rem;font-family:'JetBrains Mono',monospace;color:var(--muted);letter-spacing:0.15em;margin-bottom:0.5rem">FROM</div>
+          <input class="form-input" type="date" id="search-from" oninput="runSearch()" style="font-family:'JetBrains Mono',monospace;font-size:0.85rem" />
+        </div>
+        <div style="flex:1;min-width:140px">
+          <div style="font-size:0.6rem;font-family:'JetBrains Mono',monospace;color:var(--muted);letter-spacing:0.15em;margin-bottom:0.5rem">TO</div>
+          <input class="form-input" type="date" id="search-to" oninput="runSearch()" style="font-family:'JetBrains Mono',monospace;font-size:0.85rem" />
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-bottom:2.5rem;opacity:0;animation:fadein 1s ease 0.3s forwards">
+      <div class="form-label" style="margin-bottom:0.75rem">Julian</div>
+      <div style="display:flex;gap:1.5rem;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;font-size:0.75rem;letter-spacing:0.1em">
+        <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;color:var(--j1)">
+          <input type="checkbox" id="search-j1" checked onchange="runSearch()"> Julian — 1
+        </label>
+        <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;color:var(--j0)">
+          <input type="checkbox" id="search-j0" checked onchange="runSearch()"> Julian — 0
+        </label>
+        <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;color:var(--j2)">
+          <input type="checkbox" id="search-j2" checked onchange="runSearch()"> Julian — 2
+        </label>
+      </div>
+    </div>
+
+    <div id="search-status" style="font-size:0.75rem;font-family:'JetBrains Mono',monospace;color:var(--muted);letter-spacing:0.1em;margin-bottom:1.5rem"></div>
+    <div id="search-results"></div>
   </div>
 
   <!-- ADMIN panel -->
@@ -1316,6 +1364,114 @@ async function adminDelete(filename, folder) {
     loadAdminPending();
   }
   
+
+  // Search
+  let allEntries = { j1: [], j0: [], j2: [] };
+  let entriesLoaded = false;
+
+  async function ensureEntriesLoaded() {
+    if (entriesLoaded) return;
+    const [j1, j0, j2] = await Promise.all([
+      fetchEntries('diary'),
+      fetchEntries('diary_0'),
+      fetchEntries('diary_2')
+    ]);
+    allEntries.j1 = j1.map(e => ({ ...e, julian: 'Julian-1', color: 'var(--j1)' }));
+    allEntries.j0 = j0.map(e => ({ ...e, julian: 'Julian-0', color: 'var(--j0)' }));
+    allEntries.j2 = j2.map(e => ({ ...e, julian: 'Julian-2', color: 'var(--j2)' }));
+    entriesLoaded = true;
+  }
+
+  function highlight(text, keyword) {
+    if (!keyword) return text;
+    const escaped = keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const re = new RegExp('(' + escaped + ')', 'gi');
+    return text.replace(re, '<mark style="background:rgba(201,169,110,0.25);color:var(--text);border-radius:2px">$1</mark>');
+  }
+
+  function getSnippet(text, keyword, chars) {
+    if (chars === undefined) chars = 300;
+    const clean = cleanText(text);
+    if (!keyword) return clean.slice(0, chars) + (clean.length > chars ? '...' : '');
+    const lower = clean.toLowerCase();
+    const idx = lower.indexOf(keyword.toLowerCase());
+    if (idx === -1) return clean.slice(0, chars) + (clean.length > chars ? '...' : '');
+    const start = Math.max(0, idx - 100);
+    const end = Math.min(clean.length, idx + keyword.length + 200);
+    return (start > 0 ? '...' : '') + clean.slice(start, end) + (end < clean.length ? '...' : '');
+  }
+
+  function entryDate(filename) {
+    const match = filename.match(/(\d{4}-\d{2}-\d{2})/);
+    return match ? match[1] : null;
+  }
+
+  async function runSearch() {
+    const keyword = document.getElementById('search-keyword').value.trim();
+    const fromDate = document.getElementById('search-from').value;
+    const toDate = document.getElementById('search-to').value;
+    const useJ1 = document.getElementById('search-j1').checked;
+    const useJ0 = document.getElementById('search-j0').checked;
+    const useJ2 = document.getElementById('search-j2').checked;
+    const status = document.getElementById('search-status');
+    const results = document.getElementById('search-results');
+
+    if (!keyword && !fromDate && !toDate) {
+      status.textContent = '';
+      results.innerHTML = '';
+      return;
+    }
+
+    status.textContent = 'Searching...';
+    results.innerHTML = '';
+
+    await ensureEntriesLoaded();
+
+    let pool = [];
+    if (useJ1) pool = pool.concat(allEntries.j1);
+    if (useJ0) pool = pool.concat(allEntries.j0);
+    if (useJ2) pool = pool.concat(allEntries.j2);
+
+    let matches = pool.filter(function(e) {
+      const d = entryDate(e.name);
+      if (fromDate && d && d < fromDate) return false;
+      if (toDate && d && d > toDate) return false;
+      if (keyword && cleanText(e.text).toLowerCase().indexOf(keyword.toLowerCase()) === -1) return false;
+      return true;
+    });
+
+    if (!matches.length) {
+      status.textContent = 'No results.';
+      results.innerHTML = '';
+      return;
+    }
+
+    status.textContent = matches.length + ' result' + (matches.length === 1 ? '' : 's');
+
+    results.innerHTML = matches.map(function(e, i) {
+      const snippet = highlight(getSnippet(e.text, keyword), keyword);
+      const full = highlight(cleanText(e.text), keyword);
+      const id = 'sr-' + i;
+      return '<div style="border-top:1px solid var(--border);padding:2rem 0;animation:fadein 0.5s ease forwards;opacity:0;animation-delay:' + (i * 0.05) + 's">' +
+        '<div style="font-size:0.6rem;font-family:\'JetBrains Mono\',monospace;color:' + e.color + ';letter-spacing:0.2em;text-transform:uppercase;margin-bottom:0.4rem">' + e.julian + '</div>' +
+        '<div style="font-size:0.6rem;font-family:\'JetBrains Mono\',monospace;color:var(--muted);letter-spacing:0.15em;margin-bottom:1rem">' + formatDate(e.name) + '</div>' +
+        '<div id="' + id + '-snippet" style="font-size:1rem;line-height:1.9;font-weight:300;color:var(--text);white-space:pre-wrap">' + snippet + '</div>' +
+        '<div id="' + id + '-full" style="font-size:1rem;line-height:1.9;font-weight:300;color:var(--text);white-space:pre-wrap;display:none">' + full + '</div>' +
+        '<button onclick="toggleSearchEntry(\'' + id + '\')" id="' + id + '-btn" style="margin-top:1rem;background:none;border:none;color:var(--muted);font-family:\'JetBrains Mono\',monospace;font-size:0.6rem;letter-spacing:0.15em;cursor:pointer;text-transform:uppercase">Read full entry</button>' +
+        '</div>';
+    }).join('');
+  }
+
+  function toggleSearchEntry(id) {
+    const snippet = document.getElementById(id + '-snippet');
+    const full = document.getElementById(id + '-full');
+    const btn = document.getElementById(id + '-btn');
+    const showing = full.style.display !== 'none';
+    snippet.style.display = showing ? 'block' : 'none';
+    full.style.display = showing ? 'none' : 'block';
+    btn.textContent = showing ? 'Read full entry' : 'Collapse';
+  }
+
   detectVisitor();
   loadAll();
 </script>
