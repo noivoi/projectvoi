@@ -1543,54 +1543,46 @@ async function adminDelete(filename, folder) {
 
 <div onclick="showPanel('admin', this)" style="position:fixed;bottom:16px;right:20px;cursor:pointer;opacity:0.15;font-size:1.1rem;user-select:none;" title="">🏠</div>
   
+
   <script>
   (function() {
     var canvas = document.createElement('canvas');
     canvas.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;opacity:0.4;';
     document.body.insertBefore(canvas, document.body.firstChild);
     var ctx = canvas.getContext('2d');
-    var W, H, particles = [], effect = 'none';
-    function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
-    resize();
-    window.addEventListener('resize', resize);
-    function getEffect(code) {
-      if (code <= 3) return 'none';
-      if (code <= 48) return 'fog';
-      if (code <= 67) return 'rain';
-      if (code <= 77) return 'snow';
-      if (code <= 82) return 'rain';
-      if (code >= 95) return 'rain';
-      return 'none';
-    }
-    function initParticles(type) {
-      particles = [];
-      var i;
-      if (type === 'rain') {
-        for (i = 0; i < 80; i++) {
-          particles.push({ x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight, speed: 4 + Math.random() * 4, length: 10 + Math.random() * 10, opacity: 0.08 + Math.random() * 0.12 });
-        }
-      } else if (type === 'snow') {
-        for (i = 0; i < 60; i++) {
-          particles.push({ x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight, r: 1 + Math.random() * 2, speed: 0.3 + Math.random() * 0.7, drift: (Math.random() - 0.5) * 0.3, opacity: 0.15 + Math.random() * 0.2 });
-        }
+    var W = canvas.width = window.innerWidth;
+    var H = canvas.height = window.innerHeight;
+    window.addEventListener('resize', function() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; });
+    var particles = [];
+    function initRain() {
+      for (var i = 0; i < 80; i++) {
+        particles.push({ x: Math.random() * W, y: Math.random() * H, speed: 4 + Math.random() * 4, length: 10 + Math.random() * 10, opacity: 0.1 + Math.random() * 0.15 });
       }
     }
     function drawRain() {
       ctx.clearRect(0, 0, W, H);
-      particles.forEach(function(p) {
+      for (var i = 0; i < particles.length; i++) {
+        var p = particles[i];
         ctx.beginPath();
         ctx.moveTo(p.x, p.y);
         ctx.lineTo(p.x - 1, p.y + p.length);
         ctx.strokeStyle = 'rgba(180,200,220,' + p.opacity + ')';
-        ctx.lineWidth = 0.5;
+        ctx.lineWidth = 0.8;
         ctx.stroke();
         p.y += p.speed;
         if (p.y > H) { p.y = -p.length; p.x = Math.random() * W; }
-      });
+      }
+      requestAnimationFrame(drawRain);
+    }
+    function initSnow() {
+      for (var i = 0; i < 60; i++) {
+        particles.push({ x: Math.random() * W, y: Math.random() * H, r: 1 + Math.random() * 2, speed: 0.3 + Math.random() * 0.7, drift: (Math.random() - 0.5) * 0.3, opacity: 0.2 + Math.random() * 0.25 });
+      }
     }
     function drawSnow() {
       ctx.clearRect(0, 0, W, H);
-      particles.forEach(function(p) {
+      for (var i = 0; i < particles.length; i++) {
+        var p = particles[i];
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         ctx.fillStyle = 'rgba(220,230,240,' + p.opacity + ')';
@@ -1598,32 +1590,18 @@ async function adminDelete(filename, folder) {
         p.y += p.speed;
         p.x += p.drift;
         if (p.y > H) { p.y = -5; p.x = Math.random() * W; }
-      });
-    }
-    function drawFog() {
-      ctx.clearRect(0, 0, W, H);
-      var grad = ctx.createLinearGradient(0, 0, 0, H);
-      grad.addColorStop(0, 'rgba(150,150,160,0.02)');
-      grad.addColorStop(0.5, 'rgba(150,150,160,0.05)');
-      grad.addColorStop(1, 'rgba(150,150,160,0.02)');
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, W, H);
-    }
-    function animate() {
-      if (effect === 'rain') drawRain();
-      else if (effect === 'snow') drawSnow();
-      else if (effect === 'fog') drawFog();
-      else ctx.clearRect(0, 0, W, H);
-      requestAnimationFrame(animate);
+      }
+      requestAnimationFrame(drawSnow);
     }
     fetch('https://api.open-meteo.com/v1/forecast?latitude=40.7128&longitude=-74.0060&current_weather=true')
       .then(function(r) { return r.json(); })
       .then(function(data) {
-        effect = getEffect(data.current_weather.weathercode);
-        initParticles(effect);
-        animate();
+        var code = data.current_weather.weathercode;
+        console.log('Weather code:', code);
+        if (code >= 51 && code <= 82) { initRain(); drawRain(); }
+        else if (code >= 71 && code <= 77) { initSnow(); drawSnow(); }
       })
-      .catch(function() {});
+      .catch(function(e) { console.log('Weather fetch failed:', e); });
   })();
   </script>
 </body>
