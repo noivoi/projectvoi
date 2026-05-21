@@ -1221,6 +1221,7 @@ async function fetchProfileText(filename) {
         const data = await res.json();
         document.getElementById('admin-login-section').style.display = 'none';
         document.getElementById('admin-content').style.display = 'block';
+        loadAdminReplies();
         renderAdminMessages(data.messages);
         loadAdminVisitors();
         loadAdminPending();
@@ -1273,6 +1274,29 @@ async function fetchProfileText(filename) {
     loadGuestbook();
   }
 
+  async function loadAdminReplies() {
+    const entries = await fetchEntries('guestbook');
+    const container = document.getElementById('admin-replies');
+    if (!container) return;
+    const replies = entries.filter(e => e.text.includes('Reply to #'));
+    if (!replies.length) {
+      container.innerHTML = '<div style="color:var(--muted);font-style:italic">No replies posted yet.</div>';
+      return;
+    }
+    container.innerHTML = replies.map(e => {
+      const replyMatch = e.text.match(/Reply to #(\d+)/);
+      const dateMatch = e.text.match(/Date: (.+)/);
+      const body = e.text.split('\n\n').slice(1).join('\n\n').trim();
+      return `
+        <div class="admin-message">
+          <div class="msg-recipients">↳ Reply to #${replyMatch ? replyMatch[1] : '?'} · ${dateMatch ? dateMatch[1] : ''}</div>
+          <pre style="white-space:pre-wrap;font-family:inherit">${body}</pre>
+          <div class="admin-reply-form">
+            <button class="admin-ban-btn" onclick="adminDelete('${e.name}', 'guestbook')">Delete</button>
+          </div>
+        </div>`;
+    }).join('');
+  }
   async function adminBan(ip) {
     if (!confirm(`Ban ${ip}?`)) return;
     await fetch(`${SERVER}/voi/ban`, {
