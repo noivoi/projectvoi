@@ -1130,6 +1130,7 @@ async function fetchProfileText(filename) {
           <div class="guestbook-entry" style="animation-delay:${i * 0.1}s">
             <div class="guestbook-number">↳ Reply to #${replyMatch ? replyMatch[1] : '?'}</div>
             <div class="guestbook-reply">${body}</div>
+            ${adminPassword ? `<button class="admin-ban-btn" onclick="adminDelete('${e.name}', 'guestbook')" style="margin-top:6px;font-size:0.7rem">Delete</button>` : ''}
           </div>`;
       }
 
@@ -1139,6 +1140,7 @@ async function fetchProfileText(filename) {
           <div class="guestbook-number">#${numMatch ? numMatch[1] : '?'}</div>
           <div class="guestbook-meta">${fromMatch ? fromMatch[1] : 'Anonymous'} · ${dateMatch ? dateMatch[1] : ''}</div>
           <div class="guestbook-body">${body}</div>
+          ${adminPassword ? `<button class="admin-ban-btn" onclick="adminDelete('${e.name}', 'guestbook')" style="margin-top:6px;font-size:0.7rem">Delete</button>` : ''}
         </div>`;
     }).join('');
   }
