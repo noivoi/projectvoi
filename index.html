@@ -1267,7 +1267,7 @@ async function fetchProfileText(filename) {
       },
       body: JSON.stringify({ password: adminPassword, reply_to: num, reply })
     });
-    document.getElementById(`reply-${num}`).value = '';
+    document.getElementById(`reply-${num}`).value = ''; const s = document.createElement('div'); s.textContent = 'Reply sent.'; s.style.cssText = 'color:#6ee7b7;font-size:0.8rem;margin-top:4px;'; document.getElementById(`reply-${num}`).after(s); setTimeout(() => s.remove(), 3000);
     loadGuestbook();
   }
 
