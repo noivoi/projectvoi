@@ -543,7 +543,7 @@
   <button class="nav-tab" onclick="showPanel('guestbook', this)">Guestbook</button>
   <button class="nav-tab" onclick="showPanel('write', this)">Leave a message</button>
   <button class="nav-tab" onclick="showPanel('search', this)">Search</button>
-  <button class="nav-tab" onclick="showPanel('admin', this)">Admin</button>
+  
 </nav>
 
 <main class="main">
@@ -1207,7 +1207,7 @@ async function fetchProfileText(filename) {
     status.textContent = 'Checking...';
 
     try {
-      const res = await fetch(`${SERVER}/admin/messages`, {
+      const res = await fetch(`${SERVER}/voi/messages`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -1260,7 +1260,7 @@ async function fetchProfileText(filename) {
   async function adminReply(num) {
     const reply = document.getElementById(`reply-${num}`).value.trim();
     if (!reply) return;
-    await fetch(`${SERVER}/admin/reply`, {
+    await fetch(`${SERVER}/voi/reply`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -1273,7 +1273,7 @@ async function fetchProfileText(filename) {
 
   async function adminBan(ip) {
     if (!confirm(`Ban ${ip}?`)) return;
-    await fetch(`${SERVER}/admin/ban`, {
+    await fetch(`${SERVER}/voi/ban`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -1285,7 +1285,7 @@ async function fetchProfileText(filename) {
 
 async function adminDelete(filename, folder) {
     if (!confirm(`Delete this message permanently?`)) return;
-    await fetch(`${SERVER}/admin/delete`, {
+    await fetch(`${SERVER}/voi/delete`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ password: adminPassword, filename, folder })
@@ -1299,7 +1299,7 @@ async function adminDelete(filename, folder) {
 
   async function loadAdminVisitors(limit) {
     try {
-      const res = await fetch(`${SERVER}/admin/visitors`, {
+      const res = await fetch(`${SERVER}/voi/visitors`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ password: adminPassword, limit: limit || visitorLimit })
@@ -1320,7 +1320,7 @@ async function adminDelete(filename, folder) {
 
    async function loadAdminPending() {
     try {
-      const res = await fetch(`${SERVER}/admin/pending`, {
+      const res = await fetch(`${SERVER}/voi/pending`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ password: adminPassword })
@@ -1345,7 +1345,7 @@ async function adminDelete(filename, folder) {
   }
 
   async function adminApprove(filename) {
-    await fetch(`${SERVER}/admin/approve`, {
+    await fetch(`${SERVER}/voi/approve`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ password: adminPassword, filename })
@@ -1356,7 +1356,7 @@ async function adminDelete(filename, folder) {
 
   async function adminReject(filename) {
     if (!confirm('Reject and delete this message?')) return;
-    await fetch(`${SERVER}/admin/reject`, {
+    await fetch(`${SERVER}/voi/reject`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ password: adminPassword, filename })
@@ -1476,5 +1476,5 @@ async function adminDelete(filename, folder) {
   loadAll();
 </script>
 
-</body>
+<div onclick="showPanel('admin', this)" style="position:fixed;bottom:16px;right:20px;cursor:pointer;opacity:0.15;font-size:1.1rem;user-select:none;" title="">🏠</div></body>
 </html>
