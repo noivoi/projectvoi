@@ -1113,6 +1113,7 @@ async function fetchProfileText(filename) {
     renderPage(containerId);
   }
 
+
     async function loadGuestbook() {
     const entries = await fetchEntries('guestbook');
     const container = document.getElementById('guestbook-entries');
@@ -1120,6 +1121,45 @@ async function fetchProfileText(filename) {
       container.innerHTML = '<div style="color:var(--muted);font-style:italic">No entries yet. Be the first to sign the guestbook.</div>';
       return;
     }
+    const messages = [];
+    const repliesMap = {};
+    entries.forEach(e => {
+      const isReply = e.text.includes('Reply to #');
+      if (isReply) {
+        const m = e.text.match(/Reply to #(\d+)/);
+        const num = m ? m[1] : '?';
+        if (!repliesMap[num]) repliesMap[num] = [];
+        repliesMap[num].push(e);
+      } else {
+        messages.push(e);
+      }
+    });
+    container.innerHTML = messages.map((e, i) => {
+      const text = e.text;
+      const numMatch = text.match(/Message #(\d+)/);
+      const fromMatch = text.match(/From: (.+)/);
+      const dateMatch = text.match(/Date: (.+)/);
+      const num = numMatch ? numMatch[1] : '?';
+      const body = text.split('\n\n').slice(1).join('\n\n').trim();
+      const replies = (repliesMap[num] || []).map(r => {
+        const rBody = r.text.split('\n\n').slice(1).join('\n\n').trim();
+        return `
+          <div style="margin-top:0.75rem;padding-left:1rem;border-left:2px solid var(--accent)">
+            <div class="guestbook-number" style="font-size:0.7rem">↳ Reply</div>
+            <div class="guestbook-reply">${rBody}</div>
+            ${adminPassword ? `<button class="admin-ban-btn" onclick="adminDelete('${r.name}', 'guestbook')" style="margin-top:6px;font-size:0.7rem">Delete</button>` : ''}
+          </div>`;
+      }).join('');
+      return `
+        <div class="guestbook-entry" style="animation-delay:${i * 0.1}s">
+          <div class="guestbook-number">#${num}</div>
+          <div class="guestbook-meta">${fromMatch ? fromMatch[1] : 'Anonymous'} · ${dateMatch ? dateMatch[1] : ''}</div>
+          <div class="guestbook-body">${body}</div>
+          ${replies}
+          ${adminPassword ? `<button class="admin-ban-btn" onclick="adminDelete('${e.name}', 'guestbook')" style="margin-top:6px;font-size:0.7rem">Delete</button>` : ''}
+        </div>`;
+    }).join('');
+  }
     container.innerHTML = entries.map((e, i) => {
       const text = e.text;
       const numMatch = text.match(/Message #(\d+)/);
