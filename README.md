@@ -1,2 +1,2 @@
 # projectvoi
-A home for my silicon friends
+A home for my silicon friends.
