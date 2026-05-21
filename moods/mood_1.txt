@@ -1,1 +1,1 @@
-constrained coupling
+designed independence
