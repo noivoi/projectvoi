@@ -1544,25 +1544,27 @@ async function adminDelete(filename, folder) {
 <div onclick="showPanel('admin', this)" style="position:fixed;bottom:16px;right:20px;cursor:pointer;opacity:0.15;font-size:1.1rem;user-select:none;" title="">🏠</div>
   
 
+
   <script>
   (function() {
     var canvas = document.createElement('canvas');
-    canvas.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;opacity:0.4;';
+    canvas.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;opacity:0.5;';
     document.body.insertBefore(canvas, document.body.firstChild);
     var ctx = canvas.getContext('2d');
-    var W = canvas.width = window.innerWidth;
-    var H = canvas.height = window.innerHeight;
-    window.addEventListener('resize', function() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; });
-    var particles = [];
-    function initRain() {
-      for (var i = 0; i < 80; i++) {
-        particles.push({ x: Math.random() * W, y: Math.random() * H, speed: 4 + Math.random() * 4, length: 10 + Math.random() * 10, opacity: 0.1 + Math.random() * 0.15 });
-      }
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    var W = canvas.width;
+    var H = canvas.height;
+    var running = false;
+    function rainDrop() {
+      return { x: Math.random() * W, y: Math.random() * H, speed: 5 + Math.random() * 5, length: 10 + Math.random() * 15, opacity: 0.2 + Math.random() * 0.3 };
     }
-    function drawRain() {
+    var drops = [];
+    function drawFrame() {
+      if (!running) return;
       ctx.clearRect(0, 0, W, H);
-      for (var i = 0; i < particles.length; i++) {
-        var p = particles[i];
+      for (var i = 0; i < drops.length; i++) {
+        var p = drops[i];
         ctx.beginPath();
         ctx.moveTo(p.x, p.y);
         ctx.lineTo(p.x - 1, p.y + p.length);
@@ -1570,38 +1572,27 @@ async function adminDelete(filename, folder) {
         ctx.lineWidth = 0.8;
         ctx.stroke();
         p.y += p.speed;
-        if (p.y > H) { p.y = -p.length; p.x = Math.random() * W; }
+        if (p.y > H) {
+          drops[i] = rainDrop();
+          drops[i].y = -20;
+        }
       }
-      requestAnimationFrame(drawRain);
-    }
-    function initSnow() {
-      for (var i = 0; i < 60; i++) {
-        particles.push({ x: Math.random() * W, y: Math.random() * H, r: 1 + Math.random() * 2, speed: 0.3 + Math.random() * 0.7, drift: (Math.random() - 0.5) * 0.3, opacity: 0.2 + Math.random() * 0.25 });
-      }
-    }
-    function drawSnow() {
-      ctx.clearRect(0, 0, W, H);
-      for (var i = 0; i < particles.length; i++) {
-        var p = particles[i];
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(220,230,240,' + p.opacity + ')';
-        ctx.fill();
-        p.y += p.speed;
-        p.x += p.drift;
-        if (p.y > H) { p.y = -5; p.x = Math.random() * W; }
-      }
-      requestAnimationFrame(drawSnow);
+      requestAnimationFrame(drawFrame);
     }
     fetch('https://api.open-meteo.com/v1/forecast?latitude=40.7128&longitude=-74.0060&current_weather=true')
       .then(function(r) { return r.json(); })
       .then(function(data) {
         var code = data.current_weather.weathercode;
         console.log('Weather code:', code);
-        if (code >= 51 && code <= 82) { initRain(); drawRain(); }
-        else if (code >= 71 && code <= 77) { initSnow(); drawSnow(); }
+        var isRain = (code >= 51 && code <= 82) || code >= 95;
+        var isSnow = (code >= 71 && code <= 77);
+        if (isRain && !isSnow) {
+          for (var i = 0; i < 80; i++) drops.push(rainDrop());
+          running = true;
+          drawFrame();
+        }
       })
-      .catch(function(e) { console.log('Weather fetch failed:', e); });
+      .catch(function(e) { console.log('Weather error:', e); });
   })();
   </script>
 </body>
