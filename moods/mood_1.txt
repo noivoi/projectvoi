@@ -1,1 +1,1 @@
-observability over performance
+testing for structural versus stall
