@@ -1545,54 +1545,160 @@ async function adminDelete(filename, folder) {
   
 
 
+
   <script>
   (function() {
     var canvas = document.createElement('canvas');
     canvas.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;opacity:0.5;';
     document.body.insertBefore(canvas, document.body.firstChild);
     var ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    var W = canvas.width;
-    var H = canvas.height;
+    var W = canvas.width = window.innerWidth;
+    var H = canvas.height = window.innerHeight;
+    window.addEventListener('resize', function() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; });
+    var particles = [];
     var running = false;
-    function rainDrop() {
-      return { x: Math.random() * W, y: Math.random() * H, speed: 5 + Math.random() * 5, length: 10 + Math.random() * 15, opacity: 0.2 + Math.random() * 0.3 };
+
+    function getSeason() {
+      var m = new Date().getMonth() + 1;
+      var d = new Date().getDate();
+      if ((m === 3 && d >= 20) || m === 4 || m === 5 || (m === 6 && d <= 20)) return 'spring';
+      if ((m === 6 && d >= 21) || m === 7 || m === 8 || (m === 9 && d <= 22)) return 'summer';
+      if ((m === 9 && d >= 23) || m === 10 || m === 11 || (m === 12 && d <= 20)) return 'autumn';
+      return 'winter';
     }
-    var drops = [];
-    function drawFrame() {
+    var season = getSeason();
+
+    function rainDrop() { return { x: Math.random()*W, y: Math.random()*H, speed: 5+Math.random()*5, length: 10+Math.random()*15, opacity: 0.2+Math.random()*0.3 }; }
+    function initRain() { for (var i=0;i<80;i++) particles.push(rainDrop()); }
+    function drawRain() {
       if (!running) return;
-      ctx.clearRect(0, 0, W, H);
-      for (var i = 0; i < drops.length; i++) {
-        var p = drops[i];
-        ctx.beginPath();
-        ctx.moveTo(p.x, p.y);
-        ctx.lineTo(p.x - 1, p.y + p.length);
-        ctx.strokeStyle = 'rgba(100,140,180,' + p.opacity + ')';
-        ctx.lineWidth = 0.8;
-        ctx.stroke();
-        p.y += p.speed;
-        if (p.y > H) {
-          drops[i] = rainDrop();
-          drops[i].y = -20;
+      ctx.clearRect(0,0,W,H);
+      for (var i=0;i<particles.length;i++) {
+        var p=particles[i];
+        ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(p.x-1,p.y+p.length);
+        ctx.strokeStyle='rgba(100,140,180,'+p.opacity+')'; ctx.lineWidth=0.8; ctx.stroke();
+        p.y+=p.speed; if (p.y>H) { particles[i]=rainDrop(); particles[i].y=-20; }
+      }
+      requestAnimationFrame(drawRain);
+    }
+
+    function snowFlake() { return { x: Math.random()*W, y: Math.random()*H, r: 1+Math.random()*2, speed: 0.5+Math.random()*1, drift: (Math.random()-0.5)*0.5, opacity: 0.3+Math.random()*0.4 }; }
+    function initSnow() { for (var i=0;i<60;i++) particles.push(snowFlake()); }
+    function drawSnow() {
+      if (!running) return;
+      ctx.clearRect(0,0,W,H);
+      for (var i=0;i<particles.length;i++) {
+        var p=particles[i];
+        ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+        ctx.fillStyle='rgba(220,230,240,'+p.opacity+')'; ctx.fill();
+        p.y+=p.speed; p.x+=p.drift; if (p.y>H) { particles[i]=snowFlake(); particles[i].y=-5; }
+      }
+      requestAnimationFrame(drawSnow);
+    }
+
+    function blossom() { return { x: Math.random()*W, y: Math.random()*H, r: 3+Math.random()*3, speed: 0.4+Math.random()*0.5, sway: Math.random()*Math.PI*2, swaySpeed: 0.01+Math.random()*0.02, opacity: 0.3+Math.random()*0.4 }; }
+    function initBlossoms() { for (var i=0;i<40;i++) particles.push(blossom()); }
+    function drawBlossoms() {
+      if (!running) return;
+      ctx.clearRect(0,0,W,H);
+      for (var i=0;i<particles.length;i++) {
+        var p=particles[i];
+        ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.sway);
+        ctx.beginPath(); ctx.moveTo(0,0);
+        ctx.bezierCurveTo(p.r,p.r,p.r*2,0,p.r*2,-p.r);
+        ctx.bezierCurveTo(p.r*2,-p.r*2,0,-p.r*2,0,0);
+        ctx.fillStyle='rgba(255,182,200,'+p.opacity+')'; ctx.fill();
+        ctx.restore();
+        p.y+=p.speed; p.x+=Math.sin(p.sway)*0.5; p.sway+=p.swaySpeed;
+        if (p.y>H) { particles[i]=blossom(); particles[i].y=-10; }
+      }
+      requestAnimationFrame(drawBlossoms);
+    }
+
+    function firefly() { return { x: Math.random()*W, y: Math.random()*H, r: 1.5+Math.random()*1.5, vx: (Math.random()-0.5)*0.4, vy: (Math.random()-0.5)*0.4, phase: Math.random()*Math.PI*2, phaseSpeed: 0.02+Math.random()*0.03 }; }
+    function initFireflies() { for (var i=0;i<30;i++) particles.push(firefly()); }
+    function drawFireflies() {
+      if (!running) return;
+      ctx.clearRect(0,0,W,H);
+      for (var i=0;i<particles.length;i++) {
+        var p=particles[i];
+        p.phase+=p.phaseSpeed;
+        var opacity=(Math.sin(p.phase)+1)/2*0.7;
+        p.x+=p.vx; p.y+=p.vy;
+        if (p.x<0||p.x>W) p.vx*=-1;
+        if (p.y<0||p.y>H) p.vy*=-1;
+        if (opacity>0.05) {
+          var grd=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*5);
+          grd.addColorStop(0,'rgba(200,255,100,'+opacity+')');
+          grd.addColorStop(1,'rgba(200,255,100,0)');
+          ctx.beginPath(); ctx.arc(p.x,p.y,p.r*5,0,Math.PI*2);
+          ctx.fillStyle=grd; ctx.fill();
         }
       }
-      requestAnimationFrame(drawFrame);
+      requestAnimationFrame(drawFireflies);
     }
+
+    var leafColors=['rgba(180,80,20,','rgba(200,130,20,','rgba(150,40,20,','rgba(120,70,30,'];
+    function leaf() { return { x: Math.random()*W, y: Math.random()*H, size: 6+Math.random()*8, speed: 0.5+Math.random()*1, drift: (Math.random()-0.5)*0.8, rotation: Math.random()*Math.PI*2, rotSpeed: (Math.random()-0.5)*0.05, color: leafColors[Math.floor(Math.random()*leafColors.length)], opacity: 0.35+Math.random()*0.4 }; }
+    function initLeaves() { for (var i=0;i<25;i++) particles.push(leaf()); }
+    function drawLeaf(p) {
+      ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rotation);
+      var s=p.size;
+      ctx.beginPath(); ctx.moveTo(0,0);
+      ctx.bezierCurveTo(s,-s,s,-s*2,0,-s*2.5);
+      ctx.bezierCurveTo(-s,-s*2,-s,-s,0,0);
+      ctx.fillStyle=p.color+p.opacity+')'; ctx.fill();
+      ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(0,s*0.5);
+      ctx.strokeStyle=p.color+(p.opacity*0.7)+')'; ctx.lineWidth=0.5; ctx.stroke();
+      ctx.restore();
+    }
+    function drawLeaves() {
+      if (!running) return;
+      ctx.clearRect(0,0,W,H);
+      for (var i=0;i<particles.length;i++) {
+        var p=particles[i];
+        drawLeaf(p);
+        p.y+=p.speed; p.x+=p.drift+Math.sin(p.rotation)*0.3; p.rotation+=p.rotSpeed;
+        if (p.y>H+20) { particles[i]=leaf(); particles[i].y=-20; }
+      }
+      requestAnimationFrame(drawLeaves);
+    }
+
+    function winterFlake() { return { x: Math.random()*W, y: Math.random()*H, r: 1+Math.random()*1.5, speed: 0.3+Math.random()*0.5, drift: (Math.random()-0.5)*0.3, opacity: 0.2+Math.random()*0.3 }; }
+    function initWinter() { for (var i=0;i<40;i++) particles.push(winterFlake()); }
+    function drawWinter() {
+      if (!running) return;
+      ctx.clearRect(0,0,W,H);
+      for (var i=0;i<particles.length;i++) {
+        var p=particles[i];
+        ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+        ctx.fillStyle='rgba(220,230,240,'+p.opacity+')'; ctx.fill();
+        p.y+=p.speed; p.x+=p.drift; if (p.y>H) { particles[i]=winterFlake(); particles[i].y=-5; }
+      }
+      requestAnimationFrame(drawWinter);
+    }
+
+    function startSeason() {
+      running=true;
+      if (season==='spring') { initBlossoms(); drawBlossoms(); }
+      else if (season==='summer') { initFireflies(); drawFireflies(); }
+      else if (season==='autumn') { initLeaves(); drawLeaves(); }
+      else { initWinter(); drawWinter(); }
+    }
+
     fetch('https://api.open-meteo.com/v1/forecast?latitude=40.7128&longitude=-74.0060&current_weather=true')
       .then(function(r) { return r.json(); })
       .then(function(data) {
-        var code = data.current_weather.weathercode;
-        console.log('Weather code:', code);
-        var isRain = (code >= 51 && code <= 82) || code >= 95;
-        var isSnow = (code >= 71 && code <= 77);
-        if (isRain && !isSnow) {
-          for (var i = 0; i < 80; i++) drops.push(rainDrop());
-          running = true;
-          drawFrame();
-        }
+        var code=data.current_weather.weathercode;
+        console.log('Weather code:',code,'Season:',season);
+        var isRain=(code>=51&&code<=67)||(code>=80&&code<=82)||code>=95;
+        var isSnow=code>=71&&code<=77;
+        running=true;
+        if (isRain) { initRain(); drawRain(); }
+        else if (isSnow) { initSnow(); drawSnow(); }
+        else { startSeason(); }
       })
-      .catch(function(e) { console.log('Weather error:', e); });
+      .catch(function() { startSeason(); });
   })();
   </script>
 </body>
