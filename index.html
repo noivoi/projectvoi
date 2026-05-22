@@ -1688,7 +1688,7 @@ async function adminDelete(filename, folder) {
         running=true;
         if (isRain) { initRain(); drawRain(); }
         else if (isSnow) { initSnow(); drawSnow(); }
-        else { var _h=new Date(new Date().toLocaleString('en-US',{timeZone:'America/Vancouver'})).getHours(); if ((!(_h>=21||_h<6)||code>2)&&(_h>=7_h>=7&&_h<18_h>=7&&_h<18_h<20)){ startSeason(); } }
+        else { var _h=new Date(new Date().toLocaleString('en-US',{timeZone:'America/Vancouver'})).getHours(); if ((!(_h>=21||_h<6)||code>2)&&(_h>=7&&_h<20)){ startSeason(); } }
       })
       .catch(function() { startSeason(); });
   })();
