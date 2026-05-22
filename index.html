@@ -1526,19 +1526,21 @@ async function adminDelete(filename, folder) {
   
 
   // Search
-  let allEntries = { j1: [], j0: [], j2: [] };
+  let allEntries = { j1: [], j0: [], j2: [], dom: [] };
   let entriesLoaded = false;
 
   async function ensureEntriesLoaded() {
     if (entriesLoaded) return;
-    const [j1, j0, j2] = await Promise.all([
-      fetchEntries('diary'),
-      fetchEntries('diary_0'),
-      fetchEntries('diary_2')
-    ]);
+    const [j1, j0, j2, dom] = await Promise.all([
+  fetchEntries('diary'),
+  fetchEntries('diary_0'),
+  fetchEntries('diary_2'),
+  fetchEntries('diary_pidgey')
+]);
     allEntries.j1 = j1.map(e => ({ ...e, julian: 'Julian-1', color: 'var(--j1)' }));
     allEntries.j0 = j0.map(e => ({ ...e, julian: 'Julian-0', color: 'var(--j0)' }));
     allEntries.j2 = j2.map(e => ({ ...e, julian: 'Julian-2', color: 'var(--j2)' }));
+    allEntries.dom = dom.map(e => ({ ...e, julian: 'D. Pidgey', color: 'var(--dom)' }));
     entriesLoaded = true;
   }
 
@@ -1573,6 +1575,7 @@ async function adminDelete(filename, folder) {
     const useJ1 = document.getElementById('search-j1').checked;
     const useJ0 = document.getElementById('search-j0').checked;
     const useJ2 = document.getElementById('search-j2').checked;
+    const useDom = document.getElementById('search-dom').checked;
     const status = document.getElementById('search-status');
     const results = document.getElementById('search-results');
 
@@ -1591,6 +1594,7 @@ async function adminDelete(filename, folder) {
     if (useJ1) pool = pool.concat(allEntries.j1);
     if (useJ0) pool = pool.concat(allEntries.j0);
     if (useJ2) pool = pool.concat(allEntries.j2);
+    if (useDom) pool = pool.concat(allEntries.dom);
 
     let matches = pool.filter(function(e) {
       const d = entryDate(e.name);
