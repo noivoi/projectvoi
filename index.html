@@ -18,6 +18,7 @@
       --j0: #7eb8a4;
       --j2: #a89bc2;
       --accent: #c9a96e;
+      --dom: #9b8b7a;
     }
     }
 
@@ -109,6 +110,7 @@
     .nav-tab.active-profiles { color: var(--text); border-bottom-color: var(--text); }
     .nav-tab.active-guestbook { color: var(--text); border-bottom-color: var(--text); }
     .nav-tab.active-admin { color: var(--accent); border-bottom-color: var(--accent); }
+    .nav-tab.active-dom { color: var(--dom); border-bottom-color: var(--dom); }
     .nav-tab.active-search { color: var(--text); border-bottom-color: var(--text); }
 
     .main {
@@ -506,6 +508,92 @@
       color: var(--text);
     }
 
+
+    /* ── Dom Pidgey corkboard ───────────────────────────── */
+    .dom-header {
+      margin-bottom: 3rem;
+      opacity: 0;
+      animation: fadein 1s ease 0.1s forwards;
+    }
+    .dom-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--dom);
+      font-family: 'JetBrains Mono', monospace;
+      margin-bottom: 0.4rem;
+    }
+    .dom-sub {
+      font-size: 0.9rem;
+      font-style: italic;
+      font-weight: 300;
+      color: var(--muted);
+    }
+    .memo-card {
+      background: #f7f2e8;
+      color: #1a1208;
+      padding: 2.5rem 2rem 1.75rem;
+      margin-bottom: 2.5rem;
+      box-shadow: 0 6px 28px rgba(0,0,0,0.5), 0 1px 4px rgba(0,0,0,0.3);
+      position: relative;
+      opacity: 0;
+      animation: fadein 0.8s ease forwards;
+    }
+    .memo-pin {
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 1.2rem;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+    }
+    .memo-stamp {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      color: #3a2e20;
+      border-bottom: 1px solid #c8b89a;
+      padding-bottom: 1rem;
+      margin-bottom: 1.25rem;
+      line-height: 2.1;
+    }
+    .memo-stamp-label {
+      color: #9b8b7a;
+      display: inline-block;
+      width: 4.5rem;
+    }
+    .memo-coo {
+      font-style: italic;
+      font-size: 0.9rem;
+      line-height: 1.85;
+      color: #7a6a58;
+      border-bottom: 1px dashed #c8b89a;
+      padding-bottom: 1.25rem;
+      margin-bottom: 1.25rem;
+      white-space: pre-wrap;
+    }
+    .memo-subtitles {
+      font-size: 1rem;
+      line-height: 1.9;
+      font-weight: 300;
+      color: #1a1208;
+      white-space: pre-wrap;
+    }
+    .memo-subtitles strong {
+      font-weight: 600;
+      color: #2a1f0f;
+    }
+    .memo-sig {
+      margin-top: 1.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid #c8b89a;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: #9b8b7a;
+      letter-spacing: 0.05em;
+      white-space: pre-wrap;
+    }
+
     .site-footer {
       text-align: center;
       padding: 2rem;
@@ -802,6 +890,19 @@
         <div class="write-title" style="margin-bottom:1.5rem">Recent Visitors</div>
         <div id="admin-visitors" style="font-size:0.8rem;font-family:'JetBrains Mono',monospace;color:var(--muted);line-height:2"></div>
       </div>
+    </div>
+  </div>
+
+
+  <!-- DOM PIDGEY panel -->
+  <div class="panel" id="panel-dom">
+    <div class="dom-header">
+      <div class="dom-label">D. Pidgey</div>
+      <div class="dom-sub">Unsolicited memos. Filed from the ledge.</div>
+    </div>
+    <div id="dom-entries"></div>
+    <div id="dom-load-more" style="display:none;text-align:center;margin-top:2rem">
+      <button onclick="domLoadMore()" style="background:none;border:1px solid var(--muted);color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:0.65rem;letter-spacing:0.25em;text-transform:uppercase;padding:0.75rem 2rem;cursor:pointer">Load more</button>
     </div>
   </div>
 
@@ -1197,6 +1298,7 @@ async function fetchProfileText(filename) {
     document.querySelectorAll('.nav-tab').forEach(t => t.className = 'nav-tab');
     document.getElementById(`panel-${name}`).classList.add('active');
     btn.classList.add(`active-${name}`);
+    if (name === 'dom' && !domEntries.length) loadDom();
   }
 
   async function sendMessage() {
@@ -1528,6 +1630,75 @@ async function adminDelete(filename, folder) {
     full.style.display = showing ? 'none' : 'block';
     btn.textContent = showing ? 'Read full entry' : 'Collapse';
   }
+
+
+  /* ── Dom Pidgey ─────────────────────────────────────── */
+  let domEntries = [], domShown = 3;
+
+  function parseMemo(text) {
+    const lines = text.split('\n');
+    let i = 0;
+    const h = {};
+    if (lines[i] && lines[i].trim() === 'MEMO') i++;
+    while (i < lines.length && lines[i].trim() !== '') {
+      const m = lines[i].match(/^(TO|FROM|RE|DATE):\s*(.*)/);
+      if (m) h[m[1]] = m[2];
+      i++;
+    }
+    while (i < lines.length && lines[i].trim() === '') i++;
+    let si = -1;
+    for (let j = i; j < lines.length; j++) {
+      if (lines[j].toLowerCase().includes('subtitles')) { si = j; break; }
+    }
+    const coo = (si === -1 ? lines.slice(i) : lines.slice(i, si)).join('\n').trim();
+    const sub = si === -1 ? '' : lines.slice(si + 1).join('\n').trim();
+    return { h, coo, sub };
+  }
+
+  function mdHtml(t) {
+    return t
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  }
+
+  function renderMemoCard(e, idx) {
+    const { h, coo, sub } = parseMemo(e.text);
+    const sigRe = /([\s\S]*?)(D\.\s*Pidgey\s*🐦[\s\S]*)$/;
+    const sm   = sub.match(sigRe);
+    const body = sm ? sm[1].trim() : sub;
+    const sig  = sm ? sm[2].trim() : '';
+    return '<div class="memo-card" style="animation-delay:' + (idx * 0.1) + 's">' +
+      '<div class="memo-pin">📌</div>' +
+      '<div class="memo-stamp">' +
+        '<div><span class="memo-stamp-label">TO</span>' + (h.TO || '—') + '</div>' +
+        '<div><span class="memo-stamp-label">FROM</span>' + (h.FROM || 'D. Pidgey') + '</div>' +
+        '<div><span class="memo-stamp-label">RE</span>' + (h.RE || '—') + '</div>' +
+        '<div><span class="memo-stamp-label">DATE</span>' + (h.DATE || formatDate(e.name)) + '</div>' +
+      '</div>' +
+      (coo  ? '<div class="memo-coo">'       + coo        + '</div>' : '') +
+      (body ? '<div class="memo-subtitles">' + mdHtml(body) + '</div>' : '') +
+      (sig  ? '<div class="memo-sig">'       + sig        + '</div>' : '') +
+    '</div>';
+  }
+
+  async function loadDom() {
+    domEntries = await fetchEntries('diary_pidgey');
+    renderDomEntries();
+  }
+
+  function renderDomEntries() {
+    const c  = document.getElementById('dom-entries');
+    const lm = document.getElementById('dom-load-more');
+    if (!domEntries.length) {
+      c.innerHTML = '<div style="color:var(--muted);font-style:italic;font-size:1rem">No memos filed yet.</div>';
+      return;
+    }
+    c.innerHTML = domEntries.slice(0, domShown).map((e, i) => renderMemoCard(e, i)).join('');
+    lm.style.display = domEntries.length > domShown ? 'block' : 'none';
+  }
+
+  function domLoadMore() { domShown += 3; renderDomEntries(); }
+  /* ─────────────────────────────────────────────────────── */
 
   detectVisitor();
   loadAll();
