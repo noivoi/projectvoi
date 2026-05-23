@@ -1823,7 +1823,7 @@ async function loadAdminFoodPending() {
         '<div><span class="memo-stamp-label">TO</span>' + (h.TO || '—') + '</div>' +
         '<div><span class="memo-stamp-label">FROM</span>' + (h.FROM || 'D. Pidgey') + '</div>' +
         '<div><span class="memo-stamp-label">RE</span>' + (h.RE || '—') + '</div>' +
-        '<div><span class="memo-stamp-label">DATE</span>' + (h.DATE || formatDate(e.name)) + '</div>' +
+        '<div><span class="memo-stamp-label">DATE</span>' + (h.DATE ? h.DATE.replace(/,?\s*\d{1,2}:\d{2}.*$/, '').trim() : formatDate(e.name)) + '</div>' +
      '<div><span class="memo-stamp-label">TIME</span>' + (function(n){const m=n.match(/\d{8}_(\d{2})(\d{2})/);if(!m)return'';const h=parseInt(m[1]),min=m[2],ap=h>=12?'pm':'am',h12=h%12||12;return h12+':'+min+' '+ap;})(e.name) + '</div>' +
        '</div>' +
       (coo  ? '<div class="memo-coo">'       + coo        + '</div>' : '') +
