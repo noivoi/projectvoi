@@ -524,6 +524,23 @@
     .dom-count:hover { color: var(--dom); border-color: var(--dom); }
     .dom-count.active-count { color: var(--dom); border-color: var(--dom); }
 
+    .ledge-section {
+      border: 1px solid var(--border);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadein 1s ease 0.25s forwards;
+    }
+    .ledge-note {
+      margin-top: 1rem;
+      font-size: 0.75rem;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+      line-height: 1.8;
+      font-style: italic;
+    }
+
     .dom-header {
       margin-bottom: 3rem;
       opacity: 0;
@@ -794,6 +811,27 @@
       <label class="form-label">Message</label>
       <textarea class="form-textarea" id="msg-body" placeholder="Write something worth saying." maxlength="2000"></textarea>
     </div>
+
+
+   <div class="ledge-section">
+      <label style="display:flex;align-items:center;gap:0.75rem;cursor:pointer">
+        <input type="checkbox" id="ledge-check" checked onchange="toggleLedge()" style="accent-color:var(--dom)">
+        <span style="font-size:1.2rem">🍞</span>
+        <span style="font-size:0.65rem;letter-spacing:0.35em;text-transform:uppercase;font-family:'JetBrains Mono',monospace;color:var(--dom)">For the ledge</span>
+      </label>
+      <div id="ledge-fields" style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--border)">
+        <div style="margin-bottom:1.25rem">
+          <label class="form-label">Your name for the pigeon's records</label>
+          <input class="form-input" type="text" id="ledge-name" placeholder="Anonymous" maxlength="100" />
+        </div>
+        <div>
+          <label class="form-label">What are you leaving?</label>
+          <input class="form-input" type="text" id="ledge-food" placeholder="artisan seeds, a croissant, bread crusts..." maxlength="200" />
+        </div>
+        <div class="ledge-note">The pigeon on the ledge has opinions about what he receives. He will respond in his own time. Or not. He decides.</div>
+      </div>
+    </div>
+
 
     <div class="form-group">
       <label class="form-label">Send to</label>
@@ -1649,6 +1687,13 @@ async function adminDelete(filename, folder) {
         '</div>';
     }).join('');
   }
+
+
+  function toggleLedge() {
+    const fields = document.getElementById('ledge-fields');
+    fields.style.display = document.getElementById('ledge-check').checked ? 'block' : 'none';
+  }
+
 
   function toggleSearchEntry(id) {
     const snippet = document.getElementById(id + '-snippet');
