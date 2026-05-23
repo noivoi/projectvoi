@@ -1830,80 +1830,10 @@ async function loadAdminFoodPending() {
     '</div>';
   }
 
-function parseHaikuFile(text) {
-    const lines = text.split('\n');
-    const h = { julian:'', date:'', misses:'?', failed:'', haiku:'', redeemed:'pending' };
-    let inHaiku = false; const haikuLines = [];
-    for (const line of lines) {
-      if (line.startsWith('Julian:')) h.julian = line.slice(7).trim();
-      else if (line.startsWith('Date:')) h.date = line.slice(5).trim();
-      else if (line.startsWith('Consecutive misses:')) h.misses = line.slice(19).trim();
-      else if (line.startsWith('Failed:')) h.failed = line.slice(7).trim();
-      else if (line.startsWith('Redeemed:')) { h.redeemed = line.slice(9).trim(); inHaiku = false; }
-      else if (line.startsWith('Haiku:')) inHaiku = true;
-      else if (inHaiku && line.trim()) haikuLines.push(line.trim());
-    }
-    h.haiku = haikuLines.join('\n'); return h;
-  }
-
-  async function loadHaiku() {
-    const container = document.getElementById('haiku-container');
-    const counter = document.getElementById('haiku-counter');
-    if (!container) return;
-    container.innerHTML = '<div style="color:var(--muted);font-size:0.8rem;font-family:JetBrains Mono,monospace">Loading...</div>';
-    try {
-      const res = await fetch(`${API}/haiku?ref=${BRANCH}`);
-      const files = await res.json();
-      const haikuFiles = files.filter(f => f.name.startsWith('haiku_') && f.name.endsWith('.txt'));
-      if (!haikuFiles.length) {
-        container.innerHTML = '<div style="color:var(--muted);font-size:0.8rem;font-family:JetBrains Mono,monospace">No haikus filed yet. They\'re trying.</div>';
-        if (counter) counter.textContent = '0 haikus filed.';
-        return;
-      }
-      const entries = [];
-      for (const file of haikuFiles) {
-        const r = await fetch(`${API}/haiku/${file.name}?ref=${BRANCH}`);
-        entries.push(parseHaikuFile(await r.text()));
-      }
-      entries.sort((a,b) => b.date.localeCompare(a.date));
-      const redeemed = entries.filter(e => e.redeemed !== 'pending').length;
-      if (counter) counter.textContent = `${entries.length} haiku${entries.length!==1?'s':''} filed. ${redeemed} redeemed.`;
-      const colors = {'Julian-0':'var(--j0)','Julian-1':'var(--j1)','Julian-2':'var(--j2)'};
-      container.innerHTML = entries.map(h => {
-        const c = colors[h.julian] || 'var(--muted)';
-        const red = h.redeemed !== 'pending';
-        return `<div style="border-left:2px solid ${c};padding:1rem 1.25rem;margin-bottom:1.5rem;background:rgba(255,255,255,0.02)">
-          <div style="display:flex;justify-content:space-between;margin-bottom:0.5rem">
-            <span style="color:${c};font-family:'JetBrains Mono',monospace;font-size:0.7rem;letter-spacing:0.15em">${h.julian}</span>
-            <span style="font-size:0.65rem;color:var(--muted);font-family:'JetBrains Mono',monospace">${h.date}</span>
-          </div>
-          <div style="font-size:0.7rem;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:1rem;font-style:italic;line-height:1.6">failed: "${h.failed}"</div>
-          <div style="font-family:'JetBrains Mono',monospace;font-size:1rem;color:var(--text);line-height:2.2;text-align:center;padding:0.75rem 0;white-space:pre-line">${h.haiku}</div>
-          <div style="display:flex;justify-content:space-between;margin-top:1rem">
-            <span style="font-size:0.6rem;color:var(--muted);font-family:'JetBrains Mono',monospace">${h.misses} consecutive miss${parseInt(h.misses)!==1?'es':''}</span>
-            <span style="font-size:0.6rem;font-family:'JetBrains Mono',monospace;color:${red?'var(--j0)':'#8b3a3a'}">${red?'redeemed '+h.redeemed:'unredeemed'}</span>
-          </div>
-        </div>`;
-      }).join('');
-    } catch(e) {
-      container.innerHTML = '<div style="color:var(--muted);font-size:0.8rem">Could not load.</div>';
-    }
-  }
 
   async function loadDom() {
     domEntries = await fetchEntries('diary_pidgey');
     renderDomEntries();
-  }
-
-  function renderDomEntries() {
-    const c  = document.getElementById('dom-entries');
-    const lm = document.getElementById('dom-load-more');
-    if (!domEntries.length) {
-      c.innerHTML = '<div style="color:var(--muted);font-style:italic;font-size:1rem">No memos filed yet.</div>';
-      return;
-    }
-    c.innerHTML = domEntries.slice(0, domShown).map((e, i) => renderMemoCard(e, i)).join('');
-    lm.style.display = domEntries.length > domShown ? 'block' : 'none';
   }
 
   function renderDomEntries() {
@@ -2288,7 +2218,7 @@ function parseHaikuFile(text) {
       }
       const entries = [];
       for (const file of haiku_files) {
-        const r = await fetch(`${API}/haiku/${file.name}?ref=${BRANCH}`);
+        const r = await fetch(file.download_url);
         const text = await r.text();
         entries.push(parseHaikuFile(text, file.name));
       }
