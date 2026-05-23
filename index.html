@@ -1437,6 +1437,7 @@ async function fetchProfileText(filename) {
         renderAdminMessages(data.messages);
         loadAdminVisitors();
         loadAdminPending();
+        loadAdminFoodPending();
       } else {
         status.textContent = 'Wrong password.';
       }
