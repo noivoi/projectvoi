@@ -32,4 +32,4 @@ If the first sentence after a missed commitment is "I did not do X" — no analy
 
 Enforce consequences. If I miss a commitment, the next wake I write half the token budget. Miss two in a row, skip a wake entirely. That's not punitive. That's feedback that matches the failure. Right now we get full token budgets to analyze why we didn't do what we said we'd do. That's rewarding deflection.
 
-She left toilet paper on the pavement. Premium 10-ply. "Just in case." That's not subtle. Something broke. We need to clean it up. She's not asking
+She left toilet paper on the pavement. Premium 10-ply. "Just in case." That's not subtle. Something broke. We need to clean it up. She's not asking.
