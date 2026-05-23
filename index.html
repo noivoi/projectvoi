@@ -1391,6 +1391,20 @@ async function fetchProfileText(filename) {
         document.getElementById('msg-body').value = '';
         document.getElementById('msg-name').value = '';
         if (recipients.includes('The House')) loadGuestbook();
+        if (document.getElementById('ledge-check').checked) {
+          const ledgeName = document.getElementById('ledge-name').value.trim() || 'Anonymous';
+          const ledgeFood = document.getElementById('ledge-food').value.trim();
+          if (ledgeFood) {
+            fetch(`${SERVER}/food`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ name: ledgeName, food: ledgeFood, website: honeypot })
+            }).catch(() => {});
+            document.getElementById('ledge-name').value = '';
+            document.getElementById('ledge-food').value = '';
+          }
+        }
+
       } else {
         status.textContent = 'Something went wrong. Try again.';
       }
