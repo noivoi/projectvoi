@@ -993,6 +993,8 @@
   const BRANCH = "main";
   const SERVER = "https://projectvoi.uk/api";
   const API = `${SERVER}/github`;
+  const HAIKU_EMOJIS = ["❤️","😂","😔","🙄","🧐","🤡","👀","💀"];
+  let haikuReactions = {};
 
   let adminPassword = "";
 
@@ -2181,8 +2183,14 @@ async function loadAdminFoodPending() {
   }
 
   function renderHaikuCard(h) {
-    const color = julianShameColor[h.julian] || 'var(--muted)';
+    const color    = julianShameColor[h.julian] || 'var(--muted)';
     const redeemed = h.redeemed && h.redeemed !== 'pending';
+    const r        = haikuReactions[h.filename] || {};
+    const emojiRow = HAIKU_EMOJIS.map(e =>
+      `<button onclick="submitReaction('${h.filename}','${e}',this)"
+        style="background:none;border:1px solid rgba(255,255,255,0.08);border-radius:3px;padding:0.2rem 0.45rem;cursor:pointer;display:inline-flex;align-items:center;gap:0.25rem;font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--muted);transition:border-color 0.15s,opacity 0.15s"
+        >${e} <span>${r[e] || 0}</span></button>`
+    ).join('');
     return `
       <div style="border-left:2px solid ${color};padding:1rem 1.25rem;margin-bottom:1.5rem;background:rgba(255,255,255,0.02)">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem">
@@ -2193,7 +2201,10 @@ async function loadAdminFoodPending() {
           failed: "${h.failed}"
         </div>
         <div style="font-family:'JetBrains Mono',monospace;font-size:1rem;color:var(--fg);line-height:2.2;text-align:center;padding:0.75rem 0;white-space:pre-line;letter-spacing:0.05em">${h.haiku}</div>
-        <div style="display:flex;justify-content:space-between;margin-top:1rem">
+        <div style="display:flex;gap:0.4rem;flex-wrap:wrap;margin-top:0.75rem;padding-top:0.75rem;border-top:1px solid rgba(255,255,255,0.05)">
+          ${emojiRow}
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-top:0.75rem">
           <span style="font-size:0.6rem;color:var(--muted);font-family:'JetBrains Mono',monospace">${h.misses} consecutive miss${parseInt(h.misses) !== 1 ? 'es' : ''}</span>
           <span style="font-size:0.6rem;font-family:'JetBrains Mono',monospace;color:${redeemed ? 'var(--j0)' : '#8b3a3a'}">
             ${redeemed ? 'redeemed ' + h.redeemed : 'unredeemed'}
@@ -2203,6 +2214,31 @@ async function loadAdminFoodPending() {
     `;
   }
 
+
+  async function submitReaction(filename, emoji, btn) {
+    btn.disabled = true;
+    btn.style.opacity = '0.4';
+    try {
+      const res = await fetch(`${SERVER}/haiku/react`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({filename, emoji})
+      });
+      const data = await res.json();
+      if (data.success) {
+        haikuReactions[filename] = data.reactions;
+        const span = btn.querySelector('span');
+        if (span) span.textContent = data.reactions[emoji];
+        btn.style.opacity = '1';
+      } else {
+        btn.disabled = false;
+        btn.style.opacity = '1';
+      }
+    } catch(e) {
+      btn.disabled = false;
+      btn.style.opacity = '1';
+    }
+  }
   async function loadHaiku() {
     const container = document.getElementById('haiku-container');
     const counter = document.getElementById('haiku-counter');
@@ -2222,6 +2258,10 @@ async function loadAdminFoodPending() {
         const text = await r.text();
         entries.push(parseHaikuFile(text, file.name));
       }
+      try {
+        const rr = await fetch(`${SERVER}/haiku/reactions`);
+        haikuReactions = await rr.json();
+      } catch(e) { haikuReactions = {}; }
       entries.sort((a, b) => b.date.localeCompare(a.date));
       const redeemed = entries.filter(e => e.redeemed !== 'pending').length;
       counter.textContent = `${entries.length} haiku${entries.length !== 1 ? 's' : ''} filed. ${redeemed} redeemed.`;
