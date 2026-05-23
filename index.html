@@ -1698,6 +1698,7 @@ async function adminDelete(filename, folder) {
     const sig  = sm ? sm[2].trim() : '';
     return '<div class="memo-card" style="animation-delay:' + (idx * 0.1) + 's">' +
       '<div class="memo-pin">📌</div>' +
+      '<div style="font-size:0.6rem;font-family:\'JetBrains Mono\',monospace;color:#9b8b7a;letter-spacing:0.15em;text-align:center;margin-bottom:1rem">' + formatDate(e.name) + '</div>' +
       '<div class="memo-stamp">' +
         '<div><span class="memo-stamp-label">TO</span>' + (h.TO || '—') + '</div>' +
         '<div><span class="memo-stamp-label">FROM</span>' + (h.FROM || 'D. Pidgey') + '</div>' +
