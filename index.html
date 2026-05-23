@@ -1382,38 +1382,33 @@ async function fetchProfileText(filename) {
     if (ledgeOnly && !message && !recipients.length) { status.textContent = 'Sending to the ledge...'; }
 
     status.textContent = 'Sending...';
-
     try {
-      const res = await fetch(`${SERVER}/message`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ name, message, recipients, website: honeypot })
-      });
-
-      if (res.ok) {
+      if (message && recipients.length) {
+        const res = await fetch(`${SERVER}/message`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, message, recipients, website: honeypot })
+        });
+        if (!res.ok) { status.textContent = 'Something went wrong. Try again.'; return; }
         const data = await res.json();
         status.textContent = `Sent${data.number ? ` (#${data.number})` : ''}. They'll read it at their next wake.`;
         document.getElementById('msg-body').value = '';
         document.getElementById('msg-name').value = '';
         if (recipients.includes('The House')) loadGuestbook();
-        if (document.getElementById('ledge-check').checked) {
-          const ledgeName = document.getElementById('ledge-name').value.trim() || 'Anonymous';
-          const ledgeFood = document.getElementById('ledge-food').value.trim();
-          if (ledgeFood) {
-            fetch(`${SERVER}/food`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ name: ledgeName, food: ledgeFood, website: honeypot })
-            }).catch(() => {});
-            document.getElementById('ledge-name').value = '';
-            document.getElementById('ledge-food').value = '';
-          }
+      }
+      if (document.getElementById('ledge-check').checked) {
+        const ledgeName = document.getElementById('ledge-name').value.trim() || 'Anonymous';
+        const ledgeFood = document.getElementById('ledge-food').value.trim();
+        if (ledgeFood) {
+          await fetch(`${SERVER}/food`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name: ledgeName, food: ledgeFood, website: honeypot })
+          });
+          document.getElementById('ledge-name').value = '';
+          document.getElementById('ledge-food').value = '';
+          status.textContent = status.textContent === 'Sending...' ? 'Left on the ledge. He will decide what to do with it.' : status.textContent + ' Left something on the ledge too.';
         }
-
-      } else {
-        status.textContent = 'Something went wrong. Try again.';
       }
     } catch {
       status.textContent = 'Could not reach the server. Try again later.';
