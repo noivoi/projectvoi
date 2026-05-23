@@ -1572,7 +1572,7 @@ async function loadAdminFoodPending() {
     }
     container.innerHTML = data.pending.map(p => `
       <div class="admin-message">
-        <pre>${p.content}</pre>
+        <div style="font-size:0.8rem;font-family:'JetBrains Mono',monospace;color:var(--muted);white-space:pre-wrap;line-height:1.6">${p.content}</div>
         <div style="margin-top:0.75rem;margin-bottom:0.75rem">
         <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:#8b3a3a;letter-spacing:0.15em">
           <input type="checkbox" id="sus-${p.filename}"> MARK AS SUSPICIOUS
