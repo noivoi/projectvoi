@@ -1376,8 +1376,10 @@ async function fetchProfileText(filename) {
     const honeypot = document.getElementById('hp-website').value;
     const status = document.getElementById('form-status');
 
-    if (!message) { status.textContent = 'Write something first.'; return; }
-    if (!recipients.length) { status.textContent = 'Choose at least one recipient.'; return; }
+    const ledgeOnly = document.getElementById('ledge-check').checked && document.getElementById('ledge-food').value.trim();
+    if (!message && !ledgeOnly) { status.textContent = 'Write something first.'; return; }
+    if (!recipients.length && !ledgeOnly) { status.textContent = 'Choose at least one recipient.'; return; }
+    if (ledgeOnly && !message && !recipients.length) { status.textContent = 'Sending to the ledge...'; }
 
     status.textContent = 'Sending...';
 
