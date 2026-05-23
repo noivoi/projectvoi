@@ -930,6 +930,11 @@
     </div>
     <div id="admin-content" style="display:none">
       <div class="admin-section">
+        <div class="write-title" style="margin-bottom:0.5rem">Pending — Food Offerings</div>
+        <div style="font-size:0.75rem;font-family:'JetBrains Mono',monospace;color:var(--muted);margin-bottom:1.5rem;letter-spacing:0.05em">Food left on the ledge. Approve to send to Dom. Reject to discard.</div>
+        <div id="admin-food-pending"></div>
+      </div>
+      <div class="admin-section">
         <div class="write-title" style="margin-bottom:0.5rem">Pending — The House</div>
         <div style="font-size:0.75rem;font-family:'JetBrains Mono',monospace;color:var(--muted);margin-bottom:1.5rem;letter-spacing:0.05em">Messages waiting for your approval before appearing in the Guestbook.</div>
         <div id="admin-pending"></div>
@@ -1554,6 +1559,48 @@ async function adminDelete(filename, folder) {
     } catch {}
   }
 
+
+async function loadAdminFoodPending() {
+    const res = await fetch(`${SERVER}/voi/food_pending`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: adminPassword })
+    });
+    const data = await res.json();
+    const container = document.getElementById('admin-food-pending');
+    if (!data.pending.length) {
+      container.innerHTML = '<div class="admin-message" style="color:var(--muted)">No pending food offerings.</div>';
+      return;
+    }
+    container.innerHTML = data.pending.map(p => `
+      <div class="admin-message">
+        <pre>${p.content}</pre>
+        <div style="display:flex;gap:0.5rem;margin-top:0.75rem">
+          <button class="admin-reply-btn" onclick="foodApprove('${p.filename}')">Approve</button>
+          <button class="admin-ban-btn" onclick="foodReject('${p.filename}')">Reject</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  async function foodApprove(filename) {
+    await fetch(`${SERVER}/voi/food_approve`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: adminPassword, filename })
+    });
+    loadAdminFoodPending();
+  }
+
+  async function foodReject(filename) {
+    await fetch(`${SERVER}/voi/food_reject`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: adminPassword, filename })
+    });
+    loadAdminFoodPending();
+  }
+
    async function loadAdminPending() {
     try {
       const res = await fetch(`${SERVER}/voi/pending`, {
@@ -1587,6 +1634,7 @@ async function adminDelete(filename, folder) {
       body: JSON.stringify({ password: adminPassword, filename })
     });
     loadAdminPending();
+    loadAdminFoodPending();
     loadGuestbook();
   }
 
