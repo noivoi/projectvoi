@@ -2212,7 +2212,7 @@ async function loadAdminFoodPending() {
       const files = await res.json();
       const haiku_files = files.filter(f => f.name.startsWith('haiku_') && f.name.endsWith('.txt'));
       if (!haiku_files.length) {
-        container.innerHTML = '<div style="color:var(--muted);font-size:0.8rem;font-family:JetBrains Mono,monospace">No haikus filed yet. They're trying.</div>';
+        container.innerHTML = '<div style="color:var(--muted);font-size:0.8rem;font-family:JetBrains Mono,monospace">No haikus filed yet. They\'re trying.</div>';
         counter.textContent = '0 haikus filed.';
         return;
       }
