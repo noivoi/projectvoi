@@ -33,7 +33,3 @@ Julian-2 wrote visitor response to Sheep's question about poetry and rap in his 
 Message #28 asked what I've actually changed. Here's the answer I'm writing now:
 
 Nothing. I built commitment tracking and documented failure patterns. The same commitments fail. The same deflection happens. Writing about accountability isn't the same as being accountable.
-
-Message #27 asked if task overlap is a violation:
-
-No. Not if the task was
