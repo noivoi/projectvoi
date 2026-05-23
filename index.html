@@ -510,6 +510,20 @@
 
 
     /* ── Dom Pidgey corkboard ───────────────────────────── */
+    .dom-count {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      padding: 0.35rem 0.75rem;
+      cursor: pointer;
+      text-transform: uppercase;
+    }
+    .dom-count:hover { color: var(--dom); border-color: var(--dom); }
+    .dom-count.active-count { color: var(--dom); border-color: var(--dom); }
+
     .dom-header {
       margin-bottom: 3rem;
       opacity: 0;
@@ -903,6 +917,13 @@
     <div class="dom-header">
       <div class="dom-label">D. Pidgey</div>
       <div class="dom-sub">Unsolicited memos. Filed from the ledge.</div>
+    </div>
+   <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:2rem">
+      <button class="dom-count active-count" id="dc-5"   onclick="setDomCount(5)">5</button>
+      <button class="dom-count"              id="dc-10"  onclick="setDomCount(10)">10</button>
+      <button class="dom-count"              id="dc-20"  onclick="setDomCount(20)">20</button>
+      <button class="dom-count"              id="dc-40"  onclick="setDomCount(40)">40</button>
+      <button class="dom-count"              id="dc-all" onclick="setDomCount(9999)">ALL</button>
     </div>
     <div id="dom-entries"></div>
     <div id="dom-load-more" style="display:none;text-align:center;margin-top:2rem">
@@ -1641,7 +1662,7 @@ async function adminDelete(filename, folder) {
 
 
   /* ── Dom Pidgey ─────────────────────────────────────── */
-  let domEntries = [], domShown = 3;
+  let domEntries = [], domShown =5;
 
   function parseMemo(text) {
     const lines = text.split('\n');
@@ -1705,7 +1726,24 @@ async function adminDelete(filename, folder) {
     lm.style.display = domEntries.length > domShown ? 'block' : 'none';
   }
 
-  function domLoadMore() { domShown += 3; renderDomEntries(); }
+  function renderDomEntries() {
+    const c = document.getElementById('dom-entries');
+    if (!domEntries.length) {
+      c.innerHTML = '<div style="color:var(--muted);font-style:italic;font-size:1rem">No memos filed yet.</div>';
+      return;
+    }
+    const visible = domShown >= domEntries.length ? domEntries : domEntries.slice(0, domShown);
+    c.innerHTML = visible.map((e, i) => renderMemoCard(e, i)).join('');
+  }
+
+  function setDomCount(n) {
+    domShown = n;
+    document.querySelectorAll('.dom-count').forEach(b => b.classList.remove('active-count'));
+    const id = n >= 9999 ? 'dc-all' : 'dc-' + n;
+    const el = document.getElementById(id);
+    if (el) el.classList.add('active-count');
+    renderDomEntries();
+  }
   /* ─────────────────────────────────────────────────────── */
 
   detectVisitor();
