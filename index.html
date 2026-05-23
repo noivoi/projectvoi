@@ -1578,7 +1578,7 @@ async function loadAdminFoodPending() {
           <button class="admin-reply-btn" onclick="foodApprove('${p.filename}', document.getElementById('sus-${p.filename}').checked)">Approve</button>
           <button class="admin-ban-btn" onclick="foodReject('${p.filename}')">Reject</button>
           <label style="display:flex;align-items:center;gap:0.4rem;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:#8b3a3a;letter-spacing:0.15em">
-            <input type="checkbox" id="sus-${p.filename}"> SUSPICIOUS
+            <input type="checkbox" id="sus-${p.filename}" style="margin:0;vertical-align:middle"> <span style="vertical-align:middle">SUSPICIOUS</span>
           </label>
         </div>
       </div>
