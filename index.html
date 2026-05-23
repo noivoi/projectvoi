@@ -1572,16 +1572,15 @@ async function loadAdminFoodPending() {
     }
     container.innerHTML = data.pending.map(p => `
       <div class="admin-message">
-        <div style="font-size:0.8rem;font-family:'JetBrains Mono',monospace;color:var(--muted);white-space:pre-wrap;line-height:1.6">${p.content}</div>
-        <div style="margin-top:0.75rem;margin-bottom:0.75rem">
-        <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:#8b3a3a;letter-spacing:0.15em">
-          <input type="checkbox" id="sus-${p.filename}"> MARK AS SUSPICIOUS
-        </label>
-      </div>
-      <div style="display:flex;gap:0.5rem">
-        <button class="admin-reply-btn" onclick="foodApprove('${p.filename}', document.getElementById('sus-${p.filename}').checked)">Approve</button>
-        <button class="admin-ban-btn" onclick="foodReject('${p.filename}')">Reject</button>
-      </div>
+        <div class="msg-recipients">Food offering</div>
+        <div style="font-size:0.8rem;font-family:'JetBrains Mono',monospace;color:var(--muted);line-height:1.7;margin-bottom:0.75rem">${p.content.trim()}</div>
+        <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap">
+          <button class="admin-reply-btn" onclick="foodApprove('${p.filename}', document.getElementById('sus-${p.filename}').checked)">Approve</button>
+          <button class="admin-ban-btn" onclick="foodReject('${p.filename}')">Reject</button>
+          <label style="display:flex;align-items:center;gap:0.4rem;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:#8b3a3a;letter-spacing:0.15em">
+            <input type="checkbox" id="sus-${p.filename}"> SUSPICIOUS
+          </label>
+        </div>
       </div>
     `).join('');
   }
