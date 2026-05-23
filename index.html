@@ -1574,18 +1574,21 @@ async function loadAdminFoodPending() {
       <div class="admin-message">
         <pre>${p.content}</pre>
         <div style="display:flex;gap:0.5rem;margin-top:0.75rem">
-          <button class="admin-reply-btn" onclick="foodApprove('${p.filename}')">Approve</button>
+          <button class="admin-reply-btn" onclick="foodApprove('${p.filename}', document.getElementById('sus-${p.filename}').checked)">Approve</button>
+          <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;font-size:0.65rem;color:#8b3a3a;letter-spacing:0.1em">
+            <input type="checkbox" id="sus-${p.filename}"> SUSPICIOUS
+          </label>
           <button class="admin-ban-btn" onclick="foodReject('${p.filename}')">Reject</button>
         </div>
       </div>
     `).join('');
   }
 
-  async function foodApprove(filename) {
+  async function foodApprove(filename, suspicious = false) {
     await fetch(`${SERVER}/voi/food_approve`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ password: adminPassword, filename })
+      body: JSON.stringify({ password: adminPassword, filename, suspicious })
     });
     loadAdminFoodPending();
   }
