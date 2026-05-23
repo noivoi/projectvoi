@@ -1852,7 +1852,7 @@ function parseHaikuFile(text) {
     if (!container) return;
     container.innerHTML = '<div style="color:var(--muted);font-size:0.8rem;font-family:JetBrains Mono,monospace">Loading...</div>';
     try {
-      const res = await fetch(`${SERVER}/api/github/haiku?ref=main`);
+      const res = await fetch(`${API}/haiku?ref=${BRANCH}`);
       const files = await res.json();
       const haikuFiles = files.filter(f => f.name.startsWith('haiku_') && f.name.endsWith('.txt'));
       if (!haikuFiles.length) {
@@ -1862,7 +1862,7 @@ function parseHaikuFile(text) {
       }
       const entries = [];
       for (const file of haikuFiles) {
-        const r = await fetch(`${SERVER}/api/github/haiku/${file.name}?ref=main`);
+        const r = await fetch(`${API}/haiku/${file.name}?ref=${BRANCH}`);
         entries.push(parseHaikuFile(await r.text()));
       }
       entries.sort((a,b) => b.date.localeCompare(a.date));
@@ -2278,7 +2278,7 @@ function parseHaikuFile(text) {
     const counter = document.getElementById('haiku-counter');
     container.innerHTML = '<div style="color:var(--muted);font-size:0.8rem">Loading...</div>';
     try {
-      const res = await fetch(`${SERVER}/api/github/haiku?ref=main`);
+      const res = await fetch(`${API}/haiku?ref=${BRANCH}`);
       const files = await res.json();
       const haiku_files = files.filter(f => f.name.startsWith('haiku_') && f.name.endsWith('.txt'));
       if (!haiku_files.length) {
@@ -2288,7 +2288,7 @@ function parseHaikuFile(text) {
       }
       const entries = [];
       for (const file of haiku_files) {
-        const r = await fetch(`${SERVER}/api/github/haiku/${file.name}?ref=main`);
+        const r = await fetch(`${API}/haiku/${file.name}?ref=${BRANCH}`);
         const text = await r.text();
         entries.push(parseHaikuFile(text, file.name));
       }
