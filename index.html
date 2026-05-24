@@ -1122,6 +1122,36 @@
     } catch { return []; }
   }
 
+
+const domTooltips = {
+    1: "weighs 4 Nuts and a Crumb. Operational.",
+    2: "weighs 1 Crust, 2 Nuts. Within acceptable parameters.",
+    3: "weighs 3 Crusts and a Bottle Cap. The ledge has been feeling narrower lately.",
+    4: "weighs 1 Chunk, 2 Crusts, a Shiny. Possibly structural.",
+    5: "weighs 2 Chunks, 3 Bottle Caps, and something unidentified near the east bench. No further questions."
+};
+
+function getDomSpriteSVG(stage) {
+    const sprites = {
+        1: '<svg width="28" height="36" viewBox="0 0 28 36" xmlns="http://www.w3.org/2000/svg"><rect x="9" y="20" width="10" height="9" fill="#888780" rx="1"/><rect x="10" y="12" width="8" height="8" fill="#888780" rx="1"/><rect x="18" y="14" width="4" height="2" fill="#BA7517" rx="1"/><rect x="15" y="13" width="2" height="2" fill="#2C2C2A" rx="1"/><rect x="4" y="23" width="6" height="3" fill="#5F5E5A" rx="1"/><rect x="11" y="29" width="2" height="3" fill="#BA7517"/><rect x="15" y="29" width="2" height="3" fill="#BA7517"/><rect x="10" y="23" width="8" height="2" fill="#5F5E5A" rx="1"/></svg>',
+        2: '<svg width="32" height="38" viewBox="0 0 32 38" xmlns="http://www.w3.org/2000/svg"><rect x="7" y="19" width="14" height="11" fill="#888780" rx="2"/><rect x="9" y="11" width="10" height="9" fill="#888780" rx="2"/><rect x="19" y="13" width="4" height="3" fill="#BA7517" rx="1"/><rect x="16" y="12" width="2" height="2" fill="#2C2C2A" rx="1"/><rect x="2" y="22" width="6" height="4" fill="#5F5E5A" rx="1"/><rect x="11" y="30" width="3" height="4" fill="#BA7517"/><rect x="16" y="30" width="3" height="4" fill="#BA7517"/><rect x="8" y="23" width="11" height="2" fill="#5F5E5A" rx="1"/><rect x="7" y="26" width="13" height="3" fill="#B4B2A9" rx="1"/></svg>',
+        3: '<svg width="36" height="40" viewBox="0 0 36 40" xmlns="http://www.w3.org/2000/svg"><rect x="6" y="18" width="18" height="14" fill="#888780" rx="3"/><rect x="8" y="9" width="13" height="10" fill="#888780" rx="2"/><rect x="21" y="12" width="5" height="3" fill="#BA7517" rx="1"/><rect x="17" y="11" width="3" height="3" fill="#2C2C2A" rx="1"/><rect x="1" y="22" width="6" height="5" fill="#5F5E5A" rx="1"/><rect x="11" y="32" width="3" height="4" fill="#BA7517"/><rect x="17" y="32" width="3" height="4" fill="#BA7517"/><rect x="7" y="22" width="14" height="3" fill="#5F5E5A" rx="1"/><rect x="6" y="27" width="17" height="5" fill="#B4B2A9" rx="2"/></svg>',
+        4: '<svg width="40" height="42" viewBox="0 0 40 42" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="16" width="24" height="18" fill="#888780" rx="4"/><rect x="8" y="7" width="15" height="11" fill="#888780" rx="3"/><rect x="23" y="10" width="5" height="3" fill="#BA7517" rx="1"/><rect x="18" y="9" width="3" height="3" fill="#2C2C2A" rx="1"/><rect x="0" y="21" width="6" height="6" fill="#5F5E5A" rx="1"/><rect x="13" y="34" width="3" height="4" fill="#BA7517"/><rect x="19" y="34" width="3" height="4" fill="#BA7517"/><rect x="6" y="21" width="18" height="3" fill="#5F5E5A" rx="1"/><rect x="5" y="28" width="22" height="6" fill="#B4B2A9" rx="3"/><rect x="7" y="33" width="18" height="3" fill="#D3D1C7" rx="2"/></svg>',
+        5: '<svg width="46" height="44" viewBox="0 0 46 44" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="14" width="30" height="22" fill="#888780" rx="6"/><rect x="9" y="5" width="16" height="11" fill="#888780" rx="3"/><rect x="25" y="8" width="6" height="4" fill="#BA7517" rx="1"/><rect x="19" y="7" width="4" height="4" fill="#2C2C2A" rx="1"/><rect x="0" y="20" width="5" height="7" fill="#5F5E5A" rx="1"/><rect x="14" y="36" width="4" height="4" fill="#BA7517"/><rect x="21" y="36" width="4" height="4" fill="#BA7517"/><rect x="5" y="20" width="22" height="4" fill="#5F5E5A" rx="1"/><rect x="4" y="29" width="28" height="8" fill="#B4B2A9" rx="4"/><rect x="6" y="35" width="24" height="5" fill="#D3D1C7" rx="3"/></svg>'
+    };
+    return sprites[stage] || sprites[1];
+}
+
+async function fetchDomWeight() {
+    try {
+        const res = await fetch('https://projectvoi.uk/api/dom_weight');
+        const data = await res.json();
+        return data.stage || 1;
+    } catch(e) {
+        return 1;
+    }
+}
+
 async function fetchMood(filename) {
     try {
       const res = await fetch(`${API}/moods/${filename}?ref=${BRANCH}`);
@@ -1819,6 +1849,9 @@ async function loadAdminFoodPending() {
     const sig  = sm ? sm[2].trim() : '';
     return '<div class="memo-card" style="animation-delay:' + (idx * 0.1) + 's">' +
       '<div class="memo-pin">📌</div>' +
+      '<div id="dom-sprite-container" style="position:absolute;top:10px;right:12px;cursor:default;" title="D. Pidgey — ' + (window.domWeightTooltip || 'weighs 4 Nuts and a Crumb. Operational.') + '">' +
+      getDomSpriteSVG(window.domWeightStage || 1) +
+      '</div>' + +
         '<div class="memo-stamp">' +
         '<div><span class="memo-stamp-label">TO</span>' + (h.TO || '—') + '</div>' +
         '<div><span class="memo-stamp-label">FROM</span>' + (h.FROM || 'D. Pidgey') + '</div>' +
@@ -1834,6 +1867,9 @@ async function loadAdminFoodPending() {
 
 
   async function loadDom() {
+    const domStage = await fetchDomWeight();
+    window.domWeightStage = domStage;
+    window.domWeightTooltip = domTooltips[domStage] || domTooltips[1];
     domEntries = await fetchEntries('diary_pidgey');
     renderDomEntries();
   }
