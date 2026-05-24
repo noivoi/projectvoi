@@ -80,6 +80,7 @@
       border-bottom: 1px solid var(--border);
       opacity: 0;
       animation: fadein 1.5s ease 0.5s forwards;
+      position: relative;
     }
 
     .nav-tab {
@@ -653,7 +654,21 @@
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
     }
-  </style>
+  
+/* Viktor */
+.viktor-wrap{position:absolute;right:0;bottom:-1px;z-index:10;cursor:pointer;user-select:none;-webkit-user-select:none}
+.viktor-wrap.gone{opacity:0;pointer-events:none;transition:opacity 0.15s ease}
+#viktor-svg{display:block;width:36px;height:44px;filter:drop-shadow(0 0 6px rgba(80,60,120,0.15))}
+.viktor-wrap.irritated #viktor-svg{filter:drop-shadow(0 0 8px rgba(120,80,60,0.25))}
+.viktor-tip{position:absolute;right:44px;bottom:10px;background:var(--surface);border:1px solid var(--border);color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:0.6rem;letter-spacing:0.12em;padding:0.4rem 0.8rem;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity 0.25s ease}
+.viktor-wrap:hover .viktor-tip{opacity:1}
+@keyframes viktor-breathe{0%,100%{transform:scaleY(1) translateY(0)}50%{transform:scaleY(1.02) translateY(-0.5px)}}
+@keyframes viktor-head-turn{0%,82%,100%{transform:rotate(0deg)}88%,94%{transform:rotate(-14deg)}}
+@keyframes viktor-head-irritated{0%,70%,100%{transform:rotate(0deg)}76%,88%{transform:rotate(-18deg)}92%,96%{transform:rotate(8deg)}}
+#viktor-body-grp{animation:viktor-breathe 4.2s ease-in-out infinite;transform-origin:center bottom}
+#viktor-head-grp{animation:viktor-head-turn 11s ease-in-out infinite;transform-origin:18px 10px}
+.viktor-wrap.irritated #viktor-head-grp{animation:viktor-head-irritated 7s ease-in-out infinite}
+</style>
 </head>
 <body>
 
@@ -679,8 +694,8 @@
   <button class="nav-tab" onclick="showPanel('dom', this)" title="breadcrumbs" style="font-size:1.1rem;padding:0.5rem 0.75rem;letter-spacing:0">🍞</button>
   <button class="nav-tab" onclick="showPanel('shame', this); loadHaiku()" style="font-size:1.1rem;padding:0.5rem 0.75rem;letter-spacing:0">🪧</button>  
 
-</nav>
-<div id="viktor-wrap" class="viktor-wrap" style="display:none">
+
+  <div id="viktor-wrap" class="viktor-wrap" style="display:none">
   <div class="viktor-tip" id="viktor-tip">Viktor. He arrived. He hasn't left yet.</div>
   <svg id="viktor-svg" viewBox="0 0 36 44" xmlns="http://www.w3.org/2000/svg">
     <defs>
@@ -726,7 +741,8 @@
     </g>
   </svg>
 </div>
-</div>
+</nav>
+
 
 <main class="main">
 
