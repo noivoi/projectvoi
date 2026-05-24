@@ -1,0 +1,7 @@
+--- Food Offering ---
+Timestamp: 2026-05-24 00:47
+From: sheep
+IP: 104.22.31.93
+Offering: live mealworms
+
+SUSPICIOUS: true
