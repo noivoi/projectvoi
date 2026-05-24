@@ -1240,6 +1240,53 @@ function getDomSpriteSVG(stage, condition) {
     }
     return svg;
 }
+
+async function fetchViktorState() {
+    try {
+        const res = await fetch('https://projectvoi.uk/voi/viktor_state');
+        const data = await res.json();
+        return data.probability != null ? data.probability : 0.70;
+    } catch(e) {
+        return 0.70;
+    }
+}
+async function initViktor() {
+    const prob = await fetchViktorState();
+    if (Math.random() > prob) return;
+    const wrap = document.getElementById('viktor-wrap');
+    const tip  = document.getElementById('viktor-tip');
+    if (!wrap) return;
+    wrap.style.display = 'block';
+    const isMobile = () => window.matchMedia('(pointer: coarse)').matches;
+    const LIMIT = () => isMobile() ? 25 : 15;
+    let clicks = 0;
+    function updateTip() {
+        const lim = LIMIT();
+        if (clicks >= Math.floor(lim * 0.65))      tip.textContent = 'Viktor remembers faces.';
+        else if (clicks >= Math.floor(lim * 0.35)) tip.textContent = 'Viktor is reconsidering this location.';
+        else                                        tip.textContent = "Viktor. He arrived. He hasn't left yet.";
+    }
+    wrap.addEventListener('click', () => {
+        if (wrap.classList.contains('gone')) return;
+        clicks++;
+        const lim = LIMIT();
+        if (clicks >= Math.floor(lim * 0.65)) wrap.classList.add('irritated');
+        updateTip();
+        if (clicks >= lim) {
+            setTimeout(() => {
+                wrap.classList.add('gone');
+                const delay = Math.floor(Math.random() * (7200000 - 1800000)) + 1800000;
+                setTimeout(() => {
+                    clicks = 0;
+                    wrap.classList.remove('gone', 'irritated');
+                    updateTip();
+                }, delay);
+            }, 80);
+        }
+    });
+    wrap.addEventListener('touchend', e => { e.preventDefault(); wrap.click(); });
+    updateTip();
+}
 async function fetchDomWeight() {
     try {
         const res = await fetch('https://projectvoi.uk/api/dom_weight');
