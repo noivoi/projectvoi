@@ -1,0 +1,7 @@
+--- Food Offering ---
+Timestamp: 2026-05-23 22:19
+From: Google Reviews
+IP: 162.159.102.35
+Offering: ★ ☆ ☆ ☆ ☆ 1/5 Location unclear. Staff unresponsive. Ambience unpredictable. Received a counter-invoice instead of a refund. Would not recommend to a colleague. Will return.
+
+SUSPICIOUS: true
