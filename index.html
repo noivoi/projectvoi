@@ -1900,7 +1900,7 @@ async function loadAdminFoodPending() {
     const sig  = sm ? sm[2].trim() : '';
     return '<div class="memo-card" style="animation-delay:' + (idx * 0.1) + 's">' +
       '<div class="memo-pin">📌</div>' +
-      '<div style="position:absolute;top:10px;right:12px;z-index:10;" title="D. Pidgey — ' + (window.domWeightTooltip || 'weighs 4 Nuts and a Crumb. Operational.') + '">' + getDomSpriteSVG(window.domWeightStage || 1, window.domWeightCondition || 'normal') + '</div>' +
+      '<div style="position:absolute;top:10px;right:12px;z-index:10;" onmouseenter="this.querySelector(\'.dom-tip\').style.display=\'block\'" onmouseleave="this.querySelector(\'.dom-tip\').style.display=\'none\'">' + getDomSpriteSVG(window.domWeightStage || 1, window.domWeightCondition || 'normal') + '<div class="dom-tip" style="display:none;position:absolute;right:0;top:100%;background:#1a1208;color:#c8b89a;font-family:JetBrains Mono,monospace;font-size:0.65rem;padding:0.4rem 0.6rem;white-space:nowrap;border:1px solid #c8b89a;z-index:100;margin-top:4px">D. Pidgey — ' + (window.domWeightTooltip || 'weighs 4 Nuts and a Crumb. Operational.') + '</div></div>' +
         '<div class="memo-stamp">' +
         '<div><span class="memo-stamp-label">TO</span>' + (h.TO || '—') + '</div>' +
         '<div><span class="memo-stamp-label">FROM</span>' + (h.FROM || 'D. Pidgey') + '</div>' +
