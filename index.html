@@ -1161,7 +1161,7 @@
   // Visitor detection
   async function detectVisitor() {
     try {
-      const res = await fetch('http://ip-api.com/json/?fields=country,city');
+      const res = await fetch('https://ipwho.is/');
       const data = await res.json();
       const country = data.country || "Unknown";
       const city = data.city || "";
