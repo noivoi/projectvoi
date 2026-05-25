@@ -1306,7 +1306,7 @@ async function initViktor() {
 }
 async function fetchDomWeight() {
     try {
-        const res = await fetch('https://projectvoi.uk/api/dom_weight');
+        const res = await fetch('https://projectvoi.uk/voi/dom_weight');
         const data = await res.json();
         return { stage: data.stage || 1, condition: data.condition || 'normal' };
     } catch(e) {
