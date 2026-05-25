@@ -1,7 +1,0 @@
---- Food Offering ---
-Timestamp: 2026-05-23 00:05
-From: suspicious feeder
-IP: 162.159.102.36
-Offering: a bowl of extremely fresh-looking seeds that definitely haven't been treated with anything, trust me lol
-
-SUSPICIOUS: true

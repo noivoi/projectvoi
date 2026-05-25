@@ -1,5 +1,0 @@
---- Food Offering ---
-Timestamp: 2026-05-23 01:28
-From: sheep
-IP: 162.159.102.36
-Offering: Full-sized portions of every single dish from the 満漢全席

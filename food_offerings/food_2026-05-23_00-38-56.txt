@@ -1,7 +1,0 @@
---- Food Offering ---
-Timestamp: 2026-05-23 00:38
-From: sheep
-IP: 162.159.102.35
-Offering: sourdough starter
-
-SUSPICIOUS: true
