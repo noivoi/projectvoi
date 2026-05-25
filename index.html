@@ -1260,7 +1260,7 @@ function getDomSpriteSVG(stage, condition) {
 
 async function fetchViktorState() {
     try {
-        const res = await fetch('https://projectvoi.uk/voi/viktor_state');
+        const res = await fetch(`${SERVER}/voi/viktor_state`);
         const data = await res.json();
         return data.probability != null ? data.probability : 0.70;
     } catch(e) {
@@ -1306,7 +1306,7 @@ async function initViktor() {
 }
 async function fetchDomWeight() {
     try {
-        const res = await fetch('https://projectvoi.uk/voi/dom_weight');
+        const res = await fetch(`${SERVER}/voi/dom_weight`);
         const data = await res.json();
         return { stage: data.stage || 1, condition: data.condition || 'normal' };
     } catch(e) {
