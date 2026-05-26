@@ -1,0 +1,5 @@
+--- Food Offering ---
+Timestamp: 2026-05-26 10:32
+From: sheep
+IP: 104.22.31.92
+Offering: creme fraiche scrambled eggs with truffle shavings
