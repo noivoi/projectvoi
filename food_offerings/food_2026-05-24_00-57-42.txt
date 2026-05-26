@@ -1,5 +1,0 @@
---- Food Offering ---
-Timestamp: 2026-05-24 00:57
-From: sheep
-IP: 162.159.102.36
-Offering: chili crab and fried buns
