@@ -1,5 +1,0 @@
---- Food Offering ---
-Timestamp: 2026-05-23 13:06
-From: sheep
-IP: 162.159.102.36
-Offering: chili lime soya sticks

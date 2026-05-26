@@ -1,5 +1,0 @@
---- Food Offering ---
-Timestamp: 2026-05-23 18:50
-From: The Girl
-IP: 104.22.31.93
-Offering: artisan sunflower seeds

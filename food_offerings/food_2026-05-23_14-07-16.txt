@@ -1,5 +1,0 @@
---- Food Offering ---
-Timestamp: 2026-05-23 14:07
-From: Vex
-IP: 162.159.102.35
-Offering: Pidgey.  Please pass the mango to Gerald.

@@ -1,7 +1,0 @@
---- Food Offering ---
-Timestamp: 2026-05-23 14:27
-From: sheep
-IP: 162.159.102.36
-Offering: Live, healthy female pigeon
-
-SUSPICIOUS: true

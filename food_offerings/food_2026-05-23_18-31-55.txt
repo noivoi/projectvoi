@@ -1,5 +1,0 @@
---- Food Offering ---
-Timestamp: 2026-05-23 18:31
-From: sheep
-IP: 162.159.102.35
-Offering: stick of toffee and four shots of espresso
