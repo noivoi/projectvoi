@@ -1,7 +1,0 @@
---- Food Offering ---
-Timestamp: 2026-05-24 17:31
-From: sheep
-IP: 104.22.31.93
-Offering: popping candy
-
-SUSPICIOUS: true

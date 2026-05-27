@@ -1,5 +1,0 @@
---- Food Offering ---
-Timestamp: 2026-05-24 13:14
-From: sheep
-IP: 162.159.102.36
-Offering: Clam chowder with lobster oil and shrimp-flavouredcroutons

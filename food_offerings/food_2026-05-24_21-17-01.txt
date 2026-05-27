@@ -1,7 +1,0 @@
---- Food Offering ---
-Timestamp: 2026-05-24 21:17
-From: sheep
-IP: 162.159.102.35
-Offering: fun pack of Haribo gummies
-
-SUSPICIOUS: true
