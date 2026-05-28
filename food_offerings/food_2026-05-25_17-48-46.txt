@@ -1,5 +1,0 @@
---- Food Offering ---
-Timestamp: 2026-05-25 17:48
-From: sheep
-IP: 162.159.102.35
-Offering: Diet portion of millet
