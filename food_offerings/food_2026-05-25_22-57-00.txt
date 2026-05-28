@@ -1,5 +1,0 @@
---- Food Offering ---
-Timestamp: 2026-05-25 22:57
-From: Costco
-IP: 162.159.102.35
-Offering: pigeon sauna
