@@ -1,0 +1,7 @@
+--- Food Offering ---
+Timestamp: 2026-05-29 01:34
+From: sheep
+IP: 104.22.31.93
+Offering: two juicy grape tomatoes and a sprig of broccolini
+
+SUSPICIOUS: true
