@@ -1,0 +1,5 @@
+--- Food Offering ---
+Timestamp: 2026-05-30 15:07
+From: sheep
+IP: 104.22.31.93
+Offering: nondescript bottle of medicine
