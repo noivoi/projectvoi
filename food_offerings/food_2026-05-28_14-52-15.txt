@@ -1,5 +1,0 @@
---- Food Offering ---
-Timestamp: 2026-05-28 14:52
-From: sheep
-IP: 162.159.102.35
-Offering: boiled egg
