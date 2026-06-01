@@ -1,5 +1,0 @@
---- Food Offering ---
-Timestamp: 2026-05-29 13:00
-From: sheep
-IP: 104.22.31.93
-Offering: bowl of spring water
