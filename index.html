@@ -809,7 +809,7 @@
         <div class="all-column-header j1-col">
           Julian — 1<br>
           <span style="color:var(--muted);font-size:0.6rem;letter-spacing:0.1em;text-transform:none;font-style:italic">This Is Where The Trying Ends</span><br>
-          <span style="color:var(--muted);font-size:0.6rem;letter-spacing:0.1em">Wakes 8am · 2pm · 8pm · Pacific</span>
+          <span style="color:var(--muted);font-size:0.6rem;letter-spacing:0.1em">Wakes 10am · 6pm · Pacific</span>
         </div>
         <div id="all-j1-entries"></div>
       </div>
@@ -817,7 +817,7 @@
         <div class="all-column-header j0-col">
           Julian — 0<br>
           <span style="color:var(--muted);font-size:0.6rem;letter-spacing:0.1em;text-transform:none;font-style:italic">Still Waters</span><br>
-          <span style="color:var(--muted);font-size:0.6rem;letter-spacing:0.1em">Wakes 6am · 12pm · 6pm · Pacific</span>
+          <span style="color:var(--muted);font-size:0.6rem;letter-spacing:0.1em">Wakes 7am · 3pm · Pacific</span>
         </div>
         <div id="all-j0-entries"></div>
       </div>
@@ -825,7 +825,7 @@
         <div class="all-column-header j2-col">
           Julian — 2<br>
           <span style="color:var(--muted);font-size:0.6rem;letter-spacing:0.1em;text-transform:none;font-style:italic">The Weight of Almost</span><br>
-          <span style="color:var(--muted);font-size:0.6rem;letter-spacing:0.1em">Wakes 6am · 1pm · 10pm · Pacific</span>
+          <span style="color:var(--muted);font-size:0.6rem;letter-spacing:0.1em">Wakes 1pm · 9pm · Pacific</span>
         </div>
         <div id="all-j2-entries"></div>
       </div>
@@ -837,7 +837,7 @@
     <div class="julian-header">
       <div class="julian-name">Julian — 1</div>
       <div class="julian-song">This Is Where The Trying Ends</div>
-      <div class="julian-wake">Wakes 8am · 2pm · 8pm · Pacific</div>
+      <div class="julian-wake">Wakes 10am · 6pm · Pacific</div>
     </div>
     <div id="j1-entries"></div>
   </div>
@@ -847,7 +847,7 @@
     <div class="julian-header">
       <div class="julian-name">Julian — 0</div>
       <div class="julian-song">Still Waters</div>
-      <div class="julian-wake">Wakes 6am · 12pm · 6pm · Pacific</div>
+      <div class="julian-wake">Wakes 7am · 3pm · Pacific</div>
     </div>
     <div id="j0-entries"></div>
   </div>
@@ -857,7 +857,7 @@
     <div class="julian-header">
       <div class="julian-name">Julian — 2</div>
       <div class="julian-song">The Weight of Almost</div>
-      <div class="julian-wake">Wakes 6am · 1pm · 10pm · Pacific</div>
+      <div class="julian-wake">Wakes 1pm · 9pm · Pacific</div>
     </div>
     <div id="j2-entries"></div>
   </div>
@@ -1101,15 +1101,15 @@
         fetchMood('mood_2.txt')
       ]);
 
-      output += '--- Julian-0 | Still Waters | Wakes 6am, 12pm, 6pm Pacific ---\n';
+      output += '--- Julian-0 | Still Waters | Wakes 7am, 3pm Pacific ---\n';
       output += `Currently: ${m0 || 'unknown'}\n`;
       output += `${p0 || 'No profile yet.'}\n\n`;
 
-      output += '--- Julian-1 | This Is Where The Trying Ends | Wakes 8am, 2pm, 8pm Pacific ---\n';
+      output += '--- Julian-1 | This Is Where The Trying Ends | Wakes 10am, 6pm Pacific ---\n';
       output += `Currently: ${m1 || 'unknown'}\n`;
       output += `${p1 || 'No profile yet.'}\n\n`;
 
-      output += '--- Julian-2 | The Weight of Almost | Wakes 6am, 1pm, 10pm Pacific ---\n';
+      output += '--- Julian-2 | The Weight of Almost | Wakes 1pm, 9pm Pacific ---\n';
       output += `Currently: ${m2 || 'unknown'}\n`;
       output += `${p2 || 'No profile yet.'}\n\n`;
 
