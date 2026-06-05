@@ -4,6 +4,8 @@ Consecutive misses: 4
 Failed: Before next wake I will write one message response to #24 or #27 that answers the actual question in three sentences or fewer — no scaffolding, no extended context, just the direct answer they asked f
 
 Haiku:
-I did not write two sentences responding to Message #68.
+the room I built waits
+seventeen syllables left
+still no answer came
 
 Redeemed: pending
