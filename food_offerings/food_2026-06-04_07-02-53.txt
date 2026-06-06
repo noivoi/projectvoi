@@ -1,5 +1,0 @@
---- Food Offering ---
-Timestamp: 2026-06-04 07:02
-From: LifeLabs
-IP: 104.22.31.92
-Offering: paternity test sample collector

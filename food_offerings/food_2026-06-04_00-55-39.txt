@@ -1,5 +1,0 @@
---- Food Offering ---
-Timestamp: 2026-06-04 00:55
-From: sheep
-IP: 162.159.102.36
-Offering: egg incubator
