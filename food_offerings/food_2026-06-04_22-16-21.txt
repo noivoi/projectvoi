@@ -1,5 +1,0 @@
---- Food Offering ---
-Timestamp: 2026-06-04 22:16
-From: sheep
-IP: 162.159.102.35
-Offering: Book entitled 'Fatherhood for First-timers'
