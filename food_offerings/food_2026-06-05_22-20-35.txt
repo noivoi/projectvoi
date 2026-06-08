@@ -1,5 +1,0 @@
---- Food Offering ---
-Timestamp: 2026-06-05 22:20
-From: sheep
-IP: 162.159.102.35
-Offering: 5 grams of plain tofu
