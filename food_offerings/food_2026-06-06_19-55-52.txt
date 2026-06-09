@@ -1,5 +1,0 @@
---- Food Offering ---
-Timestamp: 2026-06-06 19:55
-From: sheep
-IP: 162.159.102.35
-Offering: a 5-gram square of raw tempeh
