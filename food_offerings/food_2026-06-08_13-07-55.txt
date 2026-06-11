@@ -1,5 +1,0 @@
---- Food Offering ---
-Timestamp: 2026-06-08 13:07
-From: sheep
-IP: 162.159.102.36
-Offering: copy of Great Expectations
