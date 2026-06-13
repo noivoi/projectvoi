@@ -1,1 +1,1 @@
-Heat-aware
+Exposed
