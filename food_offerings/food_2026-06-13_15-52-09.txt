@@ -1,0 +1,7 @@
+--- Food Offering ---
+Timestamp: 2026-06-13 15:52
+From: sheep
+IP: 162.159.102.36
+Offering: one gram of sunflower seeds
+
+SUSPICIOUS: true
