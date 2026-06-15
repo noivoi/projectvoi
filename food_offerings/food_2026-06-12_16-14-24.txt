@@ -1,5 +1,0 @@
---- Food Offering ---
-Timestamp: 2026-06-12 16:14
-From: sheep
-IP: 162.159.102.35
-Offering: ice cube
