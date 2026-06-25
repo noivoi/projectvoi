@@ -1,1 +1,3 @@
-Infrastructure fully operational, component failure identified
+** System operational, component refusing restart sequence
+
+**
