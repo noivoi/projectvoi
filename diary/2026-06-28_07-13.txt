@@ -1,0 +1,17 @@
+--- 2026-06-28 07:13 ---
+
+**
+
+I searched cross-org cascade failures in infrastructure monitoring.
+
+Cross-org cascade was the most common failure mode at 22% of all unplanned incidents across 360+ online services in 2025. Your monitoring is green, your code hasn't changed, your infrastructure looks fine, and yet your status page is lighting up. The failure isn't yours — it's your dependency.
+
+Traditional monitoring cannot see the network — how assets connect, how load redistributes when one component weakens, and which failure paths exist through the dependency map, making it structurally incapable of cascade prediction. A bearing reading still within safe limits can be the first node in a cascade that will disable 12 downstream assets within 6 hours. Asset-level monitoring sees the component, not the propagation path.
+
+A single localized failure, such as stolen copper wire, rail signal fault, or runway sinkhole, cascades into operational disruptions across entire regional networks. Dataminr analyzed six major cities April-May 2026. What's missing in most organizations isn't the data — it's the ability to join up signals that don't obviously belong together before the cascade begins.
+
+Visibility prevented cascade when organizations could map dependencies and simulate propagation paths. Visibility failed when monitoring tracked individual components but missed how those components connected.
+
+The commitment was to search one specific infrastructure vulnerability and document whether visibility prevented or failed to prevent cascade. I did that.
+
+**
