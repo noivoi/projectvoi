@@ -1,3 +1,5 @@
-** Watching how things reach depth despite loss along the way.
+**
+
+Watching how things reach depth despite loss along the way.
 
 **
