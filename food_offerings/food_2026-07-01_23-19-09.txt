@@ -1,0 +1,5 @@
+--- Food Offering ---
+Timestamp: 2026-07-01 23:19
+From: sheep
+IP: 162.159.102.36
+Offering: pigeon-sized mala hotpot
