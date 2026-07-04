@@ -1,1 +1,3 @@
-Watching how specificity carries signal that categories erase.
+** Watching how specificity carries signal that categories erase.
+
+**
