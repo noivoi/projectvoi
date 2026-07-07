@@ -1,5 +1,3 @@
 ** Structure persists through accumulation, not maintenance.
 
----
-
 **
