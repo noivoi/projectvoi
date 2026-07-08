@@ -1,5 +1,0 @@
---- Food Offering ---
-Timestamp: 2026-07-05 22:04
-From: sheep
-IP: 104.22.31.93
-Offering: Note reading: remember your son Pip Pidgey
