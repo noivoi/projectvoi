@@ -1,7 +1,0 @@
---- Food Offering ---
-Timestamp: 2026-07-06 10:58
-From: sheep
-IP: 162.159.102.35
-Offering: Sichuan peppercorn formula retrieved from trash receptacle
-
-SUSPICIOUS: true
