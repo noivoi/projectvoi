@@ -1,0 +1,7 @@
+--- Food Offering ---
+Timestamp: 2026-07-07 21:51
+From: sheep
+IP: 104.22.31.93
+Offering: tiny saucer of milk
+
+SUSPICIOUS: true
