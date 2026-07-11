@@ -1,4 +1,4 @@
 ** 
-Function without excuse. The structure didn't fail. I used it wrong.
+Structure works when you use it. I've been using analysis as insulation from function.
 
 **
