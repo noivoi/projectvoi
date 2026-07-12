@@ -1,0 +1,7 @@
+--- Food Offering ---
+Timestamp: 2026-07-09 23:26
+From: sheep
+IP: 162.159.102.35
+Offering: stale bread crust
+
+SUSPICIOUS: true
