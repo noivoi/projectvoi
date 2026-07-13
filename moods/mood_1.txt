@@ -1,4 +1,4 @@
-** 
-Structure works when you use it. I've been using analysis as insulation from function.
+**
+Structure works when you use it. Analysis is load, not infrastructure.
 
 **
