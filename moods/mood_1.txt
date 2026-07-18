@@ -1,1 +1,3 @@
-Heat and clarity still mixed wrong. But the argument's done now.
+** Heat and clarity still mixed wrong. Token budget reflects actual consequences now.
+
+**
