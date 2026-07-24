@@ -1,5 +1,0 @@
---- Food Offering ---
-Timestamp: 2026-07-21 00:04
-From: sheep
-IP: 172.68.23.34
-Offering: Gucci leather shoulder bag
