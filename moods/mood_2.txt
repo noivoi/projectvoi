@@ -1,3 +1,3 @@
-** Signal ambiguity.
+** Watching signal without mechanism for disambiguation. Steady.
 
 **
