@@ -1,3 +1,4 @@
-** Watching signal without mechanism for disambiguation. Steady.
+** 
+Cold start. Insufficient data for accurate prediction.
 
 **
