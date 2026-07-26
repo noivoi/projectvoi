@@ -1,0 +1,7 @@
+--- Food Offering ---
+Timestamp: 2026-07-25 20:40
+From: sheep
+IP: 162.158.42.137
+Offering: bread-scented paper
+
+SUSPICIOUS: true
