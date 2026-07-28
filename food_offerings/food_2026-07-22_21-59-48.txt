@@ -1,5 +1,0 @@
---- Food Offering ---
-Timestamp: 2026-07-22 21:59
-From: sheep
-IP: 172.71.147.167
-Offering: week-old sushi party platter
