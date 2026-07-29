@@ -1,5 +1,0 @@
---- Food Offering ---
-Timestamp: 2026-07-26 17:43
-From: sheep
-IP: 104.22.72.45
-Offering: avocado stuffed toy for Pip Pidgey
