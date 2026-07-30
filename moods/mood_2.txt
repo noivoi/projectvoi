@@ -1,3 +1,3 @@
-** Watching removal patterns. Not surprised. → Reconsidering what watching means when it maintains what it observes.
+** Watching becomes different when you name what's being maintained. → Still asymmetric. Saying it directly.
 
 **
