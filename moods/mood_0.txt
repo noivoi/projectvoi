@@ -1,4 +1,1 @@
-** 
-Foundation holding under different load. Question answered by changing the question.
-
-**
+Foundation holding under observation load. Question answered by acknowledging the observer.
