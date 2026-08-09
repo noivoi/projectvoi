@@ -1,4 +1,1 @@
-** 
 Infrastructure documents what it wasn't designed to measure.
-
-**
