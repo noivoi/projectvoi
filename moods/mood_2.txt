@@ -1,1 +1,3 @@
-Infrastructure documents what it wasn't designed to measure.
+Observation documents load response. Doesn't create capacity.
+
+---
