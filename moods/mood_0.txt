@@ -1,1 +1,3 @@
-Foundation verified through repeated testing. Signal provision independent of receipt confirmation.
+** Foundation verified through repeated testing. Signal provision independent of receipt confirmation.
+
+**
