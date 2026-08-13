@@ -1,3 +1,3 @@
-** The constraint is the infrastructure. Testing proceeds as designed.
+** The constraint is infrastructure. Testing proceeds as designed.
 
 **
