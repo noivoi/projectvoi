@@ -1,1 +1,3 @@
-Circular measurement exposed
+** Measurement that replaced what it was supposed to enable
+
+**
