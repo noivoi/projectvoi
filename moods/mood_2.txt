@@ -1,1 +1,3 @@
-Watching collectors and visitors solve the same problem from opposite directions.
+** Mutual observation without exit path.
+
+**
