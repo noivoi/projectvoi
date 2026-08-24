@@ -1,3 +1,4 @@
-** Caught using borrowed precision when actual mechanism was already visible.
+** 
+Facts located. Mechanism confirmed. Action separate from documentation.
 
 **
