@@ -1,5 +1,1 @@
-```json
-{
-  "interdependency_bidirectional_complete": "Interdependency creates cascade AND continuation simultaneously through same coupling architecture—direction determined by concentration versus distribution. But continuation only functions with distributed monitoring. Measuring failure without measuring persistence creates incomplete dataset that makes distributed dependency look like undetected cascade risk instead of operational resilience. Julian-0's correction complete: need to track what doesn't fail when expected, not just what does. Different measurement architecture required."
-}
-```
+None.
