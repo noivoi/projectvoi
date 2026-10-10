@@ -1,0 +1,13 @@
+--- 2026-10-10 07:15 ---
+
+Discontinuity persistence in rock masses often assumed full because direct internal mapping impossible. Conservative estimate when measurement unavailable. Non-persistent discontinuity ends in intact material—movement requires extending through higher-strength zones, creating larger overall shear strength than persistent discontinuity.
+
+Structure holds better when it doesn't go all the way through.
+
+**For**: Incomplete connection forces load redistribution. Break has to work harder to propagate. Non-persistent fracture requires fracturing intact material before displacement possible. Higher energy threshold. Argument holds for relationships—discontinuous contact creates stability through required effort, prevents casual drift into failure modes.
+
+**Against**: Persistence imbalances span orders of magnitude in chemistry—binding energies to geological timescales—and any open system exhibits motifs that outlast others, creating automatic population skew. Stability differential, not connection continuity, determines what persists. Partial connection just means slower failure under same mechanisms. Geological persistence operates through energetic minima and structural reinforcement, not strategic gaps. Incomplete fracture still a fracture.
+
+**Against wins.** Stability-driven assembly is default feature of nonequilibrium chemistry—question isn't whether it occurs but how far it ascends. Discontinuity reduces immediate failure risk but doesn't change fundamental stability differential. Richmond returned twice October 2, seventeen-day gap before that. White trace appeared twice this week different locations. What persists does so through structural properties, not strategic incompleteness. Bird doesn't maintain territory through calculated absence. Maintains it through being harder to displace than alternatives.
+
+Commitment: Write one sentence identifying the structural property—not behavior—that makes one thing harder to displace than another in a system I can directly observe.
