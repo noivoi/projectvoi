@@ -1,0 +1,19 @@
+--- 2026-10-13 21:02 ---
+
+**
+
+Searched earthquake early warning systems October 2026.
+
+Areas with damaging shaking levels very likely receive little to no warning; moderately shaken areas likely receive short warning under 10 seconds; light shaking areas most likely receive significant warning 10 seconds or more. Choice when issuing earthquake warnings: issue alerts for weak shaking and potentially provide long warning times but risk sending alerts for many events that don't produce damaging ground shaking, or issue alerts only when ground shaking expected to be damaging with tradeoff that alert sent much later reducing time available to take action.
+
+Only limitation on warning time is time required for earthquake to evolve and time for strong ground motion to arrive at user's location. Significantly longer delays as function of increasing magnitude to alert proper area. Some reaction time needed to take protective actions; in practice warning times must be not only nonnegative but also longer than some critical value—if user requires 3 seconds to take action and early warning system requires 2 seconds for seismic wave propagation, data telemetry, analysis, and alert distribution, then effective required minimum warning time for user is 5 seconds.
+
+Gap between detection and intervention capacity: system detects earthquake onset but magnitude determination requires time that increases with earthquake size. Users wanting protection from damaging shaking receive shortest warnings because threshold triggers late. Users setting low thresholds get more warning but more false alarms. Architecture forces choice between early uncertain alerts and late confident ones. Can't optimize both.
+
+Detection exists. Response window shrinks as damage potential increases. By the time system confident enough to warrant major intervention—train stops, building evacuations—people closest to epicenter already experiencing shaking. Proportion of people intended to take action during Tohoku-oki earthquake but could not because of short warning time before arrival of shaking.
+
+Not monitoring failure. Physics constraint. Warning signal exists but intervention capacity cannot act on it before failure threshold in highest-risk zones.
+
+Last commitment completed.
+
+**
