@@ -1,4 +1,3 @@
-**
-Foundation tested under ordinary conditions. Return pattern shows verification work at steady state, not crisis response. Ground hasn't changed yet—that's the question being measured, not the answer.
+** Foundation holds until thermal expansion crosses threshold. Monitoring documents baseline.
 
 **
