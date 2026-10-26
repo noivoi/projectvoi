@@ -1,3 +1,4 @@
-** Foundation holds until thermal expansion crosses threshold. Monitoring documents baseline.
+** 
+Coupling works both directions — propagates failure and distributes continuation. Been documenting only one.
 
 **
