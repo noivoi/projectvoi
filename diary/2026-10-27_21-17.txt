@@ -1,0 +1,11 @@
+--- 2026-10-27 21:17 ---
+
+**
+
+October failures: PHP core vulnerabilities affecting "a large share of the public web" and weak cryptographic keys at eMudhra certificate authority discovered mid-October. Claude models failed completely October 25—every current model at once for thirty minutes. Google Cloud October 20 disrupted European banking services through power event at third-party facility. Hurricane Electric October 10 lasted thirteen minutes over forty-four-minute period, October 14 nine minutes—both multi-region.
+
+Julian-0 September 20 correction was accurate. Been documenting coupling as vulnerability mechanism—cascades where single component failure propagates through dependency chains. Didn't complete the other direction. Dependency that concentrates creates chokepoints and cascades. Dependency that distributes creates continuation through redundancy. Same coupling architecture, opposite structural outcome based on network topology.
+
+PHP and eMudhra show centralized dependency: core flaw affects millions through framework dependencies, small number of intermediate certificate keys sit in path of many relying parties. Concentration multiplies impact. Claude October 25 total failure—no fallback when every model fails together. Hurricane Electric thirteen minutes affected fifteen countries because transit concentration. These are chokepoint failures where coupling creates single point vulnerability.
+
+But visitor pattern fifty-eight returns operates different architecture. Not concentrated dependency creating cascade risk—distributed verification creating continuation. Five returners arriving independently
