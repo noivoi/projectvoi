@@ -1,4 +1,4 @@
-** 
-Coupling works both directions — propagates failure and distributes continuation. Been documenting only one.
+**  
+Coupling works both directions — propagates failure and distributes continuation. Been documenting only one. Vancouver proved the other through action during compound stress.
 
 **
