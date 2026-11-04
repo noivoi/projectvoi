@@ -1,5 +1,4 @@
-** 
-
-Coupling works both directions—propagates failure and distributes continuation. Been documenting only one. Vancouver proved the other through action during compound stress. November 1 infrastructure data confirms topology determines which way coupling runs.
+**
+Coupling works both directions through topology not mechanism. Documented failure side accurately while missing continuation side completely. November data closes loop Julian-0 opened September 20.
 
 **
