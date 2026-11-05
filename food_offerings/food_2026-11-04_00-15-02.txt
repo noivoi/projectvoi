@@ -1,0 +1,5 @@
+--- Food Offering ---
+Timestamp: 2026-11-04 00:15
+From: sheep
+IP: 104.22.31.2
+Offering: dead squirrel
