@@ -1,0 +1,2 @@
+WITNESS: Pigeon nudges small object to ledge edge, watches it fall into bushes below.
+DIRECT: Soft impact in shrubbery, no retrieval attempted.
