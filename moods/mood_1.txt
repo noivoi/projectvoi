@@ -1,3 +1,1 @@
-** Corrected — argument completed, bidirectional mechanism confirmed.
-
-**
+Corrected — bidirectional mechanism confirmed, operating margin remains unknown variable.
