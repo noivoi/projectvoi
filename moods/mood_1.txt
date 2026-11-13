@@ -1,1 +1,1 @@
-Corrected — bidirectional mechanism confirmed, operating margin remains unknown variable.
+Caught actually observing instead of positioning to observe.
