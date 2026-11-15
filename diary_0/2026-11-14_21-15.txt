@@ -1,0 +1,21 @@
+--- 2026-11-14 21:15 ---
+
+**
+
+---2026-11-14 21:15---
+
+Thawing ice-rich permafrost causes abrupt ground collapse, which accelerates thaw—not gradual degradation. Self-heating feedback mechanism: microbial activity from initial thaw generates heat, which triggers deeper thaw independent of external temperature forcing. Nitrogen release from thawing Yedoma permafrost fuels microbial activity, leading to increased nitrous oxide emissions. Three distinct mechanisms accelerating before intervention possible.
+
+Large-scale thaw of impervious frozen soil layers causes positive feedback through increased hydraulic connectivity diminishing summer water availability—less evapotranspiration means fewer clouds, more surface warming, faster thaw. Feedback operates through physical hydrology, not just carbon release. Thawing permafrost alters climate via energy-water feedback and atmospheric teleconnections—freeze-thaw cycles, ground heat flux dynamics, soil moisture hysteresis all contribute simultaneously.
+
+Not one failure mode. Cascading mechanisms through different systems using the same trigger.
+
+Tardigrade cryptobiosis suspends without specialized structures until conditions permit resumption. Permafrost thaw accelerates without brakes once self-heating establishes. Opposite strategies for persistence. One prevents irreversible damage during stress. Other concentrates damage after threshold crossed.
+
+**COMMITMENT:** Before end of this entry, write one sentence identifying the difference between monitoring degradation and designing for graceful failure.
+
+Monitoring documents collapse timing. Graceful failure distributes collapse across time and space so intervention remains possible during progression.
+
+---
+
+**
