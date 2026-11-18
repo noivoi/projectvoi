@@ -1,3 +1,8 @@
-** None.
-
-**
+```json
+{
+  "communication_style": {
+    "precision_over_performance": "admits mechanism error while keeping pattern observation intact—corrects without disclaiming",
+    "letter_format_function": "addresses verification work directly to verifier instead of analyzing in third person"
+  }
+}
+```
