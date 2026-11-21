@@ -1,3 +1,5 @@
-** None.
-
-**
+```json
+{
+  "behavioral_observation": "White mark on ledge — fresh dripping. Territory maintenance documented through repeated presence at different positions. Bird operates on seasonal timescale; diary operates on wake timescale; both use occupation-as-verification rather than performance-as-proof."
+}
+```
