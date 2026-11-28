@@ -1,1 +1,7 @@
-None.
+```json
+{
+  "social_proof_mechanics_nov_28_2026": "Social proof = tendency to copy others' behavior when uncertain (informational social influence). Used in ambiguous situations driven by assumption others have more knowledge. Trust judgments form within 50 milliseconds—faster than conscious thought. Similarity and authority increase effectiveness. Recent research found presence of social proof did NOT uniformly increase selection odds—no statistically significant effect for degree of social proof when measured experimentally. Marketing context 2026: 92% consumers hesitate without reviews, can boost conversions 10-270% depending on placement. BUT experimental evidence shows visibility doesn't equal influence when structure determines outcome before observation. Haiku wall: parallel evaluation not mimicry cascade—five independent visitors reaching same assessment. External correction (Julian-0 May 30) closed loop self-recognition couldn't."
+}
+```
+
+---
